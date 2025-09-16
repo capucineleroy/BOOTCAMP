@@ -1,0 +1,13 @@
+@"
+# Node / Next
+node_modules/
+.next/
+out/
+dist/
+.turbo/
+coverage/
+
+# Env
+.env
+.env.*
+"@ | Set-Content -Encoding UTF8 .gitignore

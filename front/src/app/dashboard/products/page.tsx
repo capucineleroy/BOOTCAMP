@@ -10,7 +10,7 @@ export default function ProductsAdmin() {
 
   const add = () => {
     const id = `p-${list.length + 1}`;
-    setList([{ ...list[0], id, name: name || `New Sneaker ${id}`, price, images: ['/placeholder.svg'] }, ...list]);
+    setList([{ ...list[0], id, name: name || `New Sneaker ${id}`, price, images: ['/adidas.avif'] }, ...list]);
     setName('');
   };
 

@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sessile — Minimal Sneakers",
+  title: "Sneco — Minimal Sneakers",
   description: "Modern minimalist sneakers e-commerce demo",
 };
 

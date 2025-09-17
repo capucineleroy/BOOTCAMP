@@ -22,14 +22,17 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
+    <header className="sticky top-0 z-40 bg-[#FFF] backdrop-blur border-b-[#E6E6E6] border-b font-[poppins]">
       <div className="container flex items-center justify-between h-16">
         <div className="flex items-center gap-3">
           <button className="sm:hidden p-2" onClick={() => setOpen((v) => !v)}>
             <MenuIcon className="w-6 h-6" />
           </button>
-          <Link href="/" className="text-lg font-semibold tracking-tight">SESSILE</Link>
-          <nav className="hidden sm:flex items-center gap-6 text-sm text-neutral-700">
+          <Link href="/" className="text-lg font-semibold tracking-tight text-[#015A52] font-extrabold">SNECO</Link>
+          
+        </div>
+        <div className='flex justify-center'>
+          <nav className="hidden sm:flex flex items-center gap-6 text-sm text-neutral-700">
             <Link href="/shop" className="hover:text-black">E-shop</Link>
             <Link href="/brand" className="hover:text-black">Brand</Link>
             <Link href="/new" className="hover:text-black">New Arrivals</Link>
@@ -38,19 +41,6 @@ export default function Navbar() {
             )}
           </nav>
         </div>
-
-        <form onSubmit={submitSearch} className="hidden sm:flex items-center gap-2 w-[360px] max-w-full">
-          <div className="relative flex-1">
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Search sneakers..."
-              className="w-full rounded-full border px-4 py-2 pl-10 text-sm outline-none focus:ring-2 ring-[color:var(--color-brand-2)]"
-            />
-            <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
-          </div>
-        </form>
-
         <div className="flex items-center gap-3">
           <Link href="/favorites" className="p-2 text-neutral-700 hover:text-black" aria-label="Favorites">
             <HeartIcon className="w-6 h-6" />

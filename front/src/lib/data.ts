@@ -1,7 +1,7 @@
 import type { Product } from './types';
 
 // Basic placeholder image paths available in /public
-const PLACEHOLDER = '/placeholder.svg';
+const PLACEHOLDER = '/adidas.avif';
 
 const colors = [
   '#FEB9B1', // blush

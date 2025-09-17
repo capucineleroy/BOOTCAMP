@@ -39,7 +39,7 @@ export default function ShopPage() {
       <div className="mb-6 flex items-end justify-between">
         <div>
           <div className="flex items-center gap-10">
-            <h1 className="text-2xl font-semibold">E-shop</h1>
+            <h1 className="text-2xl font-semibold">Catalogue</h1>
             <form onSubmit={submitSearch} className="hidden w-[360px] max-w-full items-center gap-2 sm:flex">
               <div className="relative flex-1">
                 <input

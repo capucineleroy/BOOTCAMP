@@ -6,7 +6,7 @@ const PLACEHOLDER = '/adidas.avif';
 const colors = [
   '#FEB9B1', // blush
   '#FE8B59', // coral
-  '#018D5B', // green
+  '#015A52', // green
   '#014545', // deep teal
   '#111111',
   '#888888',

@@ -47,3 +47,41 @@ export function MenuIcon({ className = '' }: { className?: string }) {
   );
 }
 
+export function LeafIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4.5 20c.2-8 6.7-15.1 15.5-16-.7 8.8-7.6 15.8-15.5 16Z" />
+      <path d="M5 19.5C9.2 15 13.6 10.8 20 6" />
+    </svg>
+  );
+}
+
+export function AwardIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="8" r="4" />
+      <path d="M8.21 13.89 7 21l5-2 5 2-1.21-7.11" />
+    </svg>
+  );
+}
+
+
+
+
+

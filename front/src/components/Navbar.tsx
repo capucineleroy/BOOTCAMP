@@ -33,9 +33,9 @@ export default function Navbar() {
         </div>
         <div className='flex justify-center'>
           <nav className="hidden sm:flex flex items-center gap-6 text-sm text-neutral-700">
-            <Link href="/shop" className="hover:text-black">E-shop</Link>
-            <Link href="/brand" className="hover:text-black">Brand</Link>
-            <Link href="/new" className="hover:text-black">New Arrivals</Link>
+            <Link href="/shop" className="hover:text-black">Catalogue</Link>
+            <Link href="/brand" className="hover:text-black">La marque</Link>
+            <Link href="/new" className="hover:text-black">Nouveautés</Link>
             {(role === 'seller' || role === 'admin') && (
               <Link href="/dashboard" className="hover:text-black">Dashboard</Link>
             )}

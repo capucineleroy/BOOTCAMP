@@ -9,7 +9,7 @@ type AuthState = {
   user: User | null;
   role: Role;
   login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -22,8 +22,12 @@ const toAppUser = (raw: SupabaseUser | null | undefined): User | null => {
 
   const email = raw.email ?? "";
   const metadata = raw.user_metadata ?? {};
+  const metadataFirstName = typeof metadata.firstName === "string" ? metadata.firstName.trim() : "";
+  const metadataLastName = typeof metadata.lastName === "string" ? metadata.lastName.trim() : "";
   const metadataName = typeof metadata.name === "string" ? metadata.name.trim() : "";
-  const name = metadataName || (email.includes("@") ? email.split("@")[0] : email) || "Utilisateur";
+  const derivedName = [metadataFirstName, metadataLastName].filter(Boolean).join(" ") || metadataName;
+  const fallbackName = derivedName || (email.includes("@") ? email.split("@")[0] : "");
+  const name = fallbackName || "Utilisateur";
   const metadataRole = typeof metadata.role === "string" ? metadata.role : undefined;
   const role: Role = metadataRole === "admin" || metadataRole === "seller" || metadataRole === "client" ? metadataRole : DEFAULT_ROLE;
 
@@ -65,16 +69,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (error) throw error;
   }, []);
 
-  const signup = useCallback(async (name: string, email: string, password: string) => {
-    const trimmedName = name.trim();
+  const signup = useCallback(async (firstName: string, lastName: string, email: string, password: string) => {
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+    const trimmedEmail = email.trim();
+    const displayName = [trimmedFirstName, trimmedLastName].filter(Boolean).join(" ") || (trimmedEmail.includes("@") ? trimmedEmail.split("@")[0] : trimmedEmail);
+
     const { error } = await supabase.auth.signUp({
-      email,
+      email: trimmedEmail,
       password,
       options: {
-        data: { name: trimmedName || (email.includes("@") ? email.split("@")[0] : email), role: DEFAULT_ROLE },
+        data: {
+          firstName: trimmedFirstName,
+          lastName: trimmedLastName,
+          name: displayName,
+          role: DEFAULT_ROLE,
+        },
         emailRedirectTo: getRedirectUrl(),
       },
     });
+
     if (error) throw error;
   }, []);
 

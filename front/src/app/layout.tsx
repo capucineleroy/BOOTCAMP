@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { CartProvider } from "../context/CartContext";
@@ -35,7 +35,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Navbar />
+              <Header />
               <main className="min-h-[70vh]">{children}</main>
               <Footer />
               <CartDrawer />

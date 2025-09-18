@@ -12,10 +12,11 @@ export default function CartDrawer() {
         onClick={close}
       />
       <aside
-        className={`absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-xl transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-xl transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">Your Cart</h2>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-b-[#E6E6E6]">
+          <h2 className="text-lg font-semibold text-[#015A52]">Your Cart</h2>
           <button onClick={close} className="text-sm text-neutral-600 hover:text-neutral-900">Close</button>
         </div>
         <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-9rem)]">
@@ -43,13 +44,16 @@ export default function CartDrawer() {
                   <button className="text-xs text-rose-600" onClick={() => remove(item.variantId)}>Remove</button>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Total */}
+          <div className="mt-auto border-t-2 border-[#015A52] bg-white p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-neutral-600">Total</span>
+              <span className="text-base font-semibold">{subtotal.toFixed(0)} €</span>
             </div>
-          ))}
-        </div>
-        <div className="p-4 border-t">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-neutral-600">Subtotal</span>
-            <span className="text-base font-semibold">{subtotal.toFixed(0)} €</span>
+            <button className="w-full py-3 rounded-lg bg-[#015A52] text-white hover:opacity-95">Checkout</button>
           </div>
           <Link href="/checkout" className="w-full block text-center py-3 rounded-lg bg-[#1f1fff] text-white hover:opacity-95">Checkout</Link>
         </div>
@@ -57,4 +61,7 @@ export default function CartDrawer() {
     </div>
   );
 }
+
+
+
 

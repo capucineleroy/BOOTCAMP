@@ -1,30 +1,57 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#015A52]/75 ">
-      <div className="container py-8 grid gap-6 sm:grid-cols-3 text-sm text-white">
+    <footer className="bg-white">
+      <div className="container grid gap-6 py-8 text-sm text-neutral-800 sm:grid-cols-3">
         <div>
-          <h4 className="text-white font-semibold mb-2">À propos</h4>
-          <p className="leading-relaxed">Minimalist sneakers designed in Europe with a focus on sustainability and timeless style.</p>
+          <h4 className="mb-2 font-semibold text-neutral-950">A propos</h4>
+          <p className="leading-relaxed">
+            Minimalist sneakers designed in Europe with a focus on sustainability and timeless style.
+          </p>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-2">Suivez nous</h4>
+          <h4 className="mb-2 font-semibold text-neutral-950">Suivez nous</h4>
           <ul className="space-y-1">
-            <li><a href="#" className="hover:underline">Instagram</a></li>
-            <li><a href="#" className="hover:underline">Twitter</a></li>
-            <li><a href="#" className="hover:underline">Facebook</a></li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Twitter
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Facebook
+              </a>
+            </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-white font-semibold mb-2">Mentions légales</h4>
+          <h4 className="mb-2 font-semibold text-neutral-950">Mentions legales</h4>
           <ul className="space-y-1">
-            <li><a href="#" className="hover:underline">Mentions légales</a></li>
-            <li><a href="#" className="hover:underline">Politique de confidentialité (RGPD)</a></li>
-            <li><a href="#" className="hover:underline">Conditions d’utilisation</a></li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Mentions legales
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Politique de confidentialite (RGPD)
+              </a>
+            </li>
+            <li>
+              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Conditions d'utilisation
+              </a>
+            </li>
           </ul>
         </div>
       </div>
-      <div className="border-t py-4 text-center text-xs text-white">© {new Date().getFullYear()} SNECO — All rights reserved.</div>
+      <div className="border-t py-4 text-center text-xs text-neutral-500">
+        (c) {new Date().getFullYear()} SNECO - All rights reserved.
+      </div>
     </footer>
   );
 }
-

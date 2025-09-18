@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
     <div className="group rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100">
       <div className="relative aspect-square overflow-hidden">
         <div className="absolute left-2 top-2 z-10 text-xs bg-white/90 backdrop-blur rounded px-2 py-1 text-emerald-700 font-medium">
-          {co2} kg CO₂e
+          {co2} g CO₂e
         </div>
 
         <button

@@ -53,23 +53,42 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const add = async (variantId: string, quantity = 1) => {
-    setItems((prev) => {
-      const idx = prev.findIndex((i) => i.variantId === variantId);
-      if (idx >= 0) {
-        const copy = [...prev];
-        copy[idx] = { ...copy[idx], quantity: copy[idx].quantity + quantity };
-        return copy;
-      }
-      return [...prev, { variantId, quantity }];
-    });
-    setOpen(true);
-
-    // Persist to Supabase cart if available
     try {
-      const cartId = localStorage.getItem(CART_ID_KEY) ?? undefined;
-      if (!cartId) return;
-      await api.addCartItem(cartId, variantId, quantity);
-    } catch (e) {}
+      // enforce stock limit using variant info
+      const info = await api.getVariantWithProduct(variantId);
+      const stock = info?.variant.stock ?? Number.MAX_SAFE_INTEGER;
+      setItems((prev) => {
+        const idx = prev.findIndex((i) => i.variantId === variantId);
+        if (idx >= 0) {
+          const copy = [...prev];
+          const nextQty = Math.min(copy[idx].quantity + quantity, stock);
+          copy[idx] = { ...copy[idx], quantity: nextQty };
+          return copy;
+        }
+        const initialQty = Math.min(quantity, stock);
+        return [...prev, { variantId, quantity: initialQty }];
+      });
+      setOpen(true);
+
+      // Persist to Supabase cart if available
+      try {
+        const cartId = localStorage.getItem(CART_ID_KEY) ?? undefined;
+        if (!cartId) return;
+        await api.addCartItem(cartId, variantId, Math.min(quantity, stock));
+      } catch (e) {}
+    } catch (e) {
+      // fallback optimistic
+      setItems((prev) => {
+        const idx = prev.findIndex((i) => i.variantId === variantId);
+        if (idx >= 0) {
+          const copy = [...prev];
+          copy[idx] = { ...copy[idx], quantity: copy[idx].quantity + quantity };
+          return copy;
+        }
+        return [...prev, { variantId, quantity }];
+      });
+      setOpen(true);
+    }
   };
 
   const remove = async (variantId: string) => {
@@ -88,9 +107,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setQuantity = async (variantId: string, qty: number) => {
-    const clamped = Math.max(1, qty);
-    setItems((prev) => prev.map((i) => (i.variantId === variantId ? { ...i, quantity: clamped } : i)));
     try {
+      const info = await api.getVariantWithProduct(variantId);
+      const stock = info?.variant.stock ?? Number.MAX_SAFE_INTEGER;
+      const clamped = Math.max(1, Math.min(qty, stock));
+      setItems((prev) => prev.map((i) => (i.variantId === variantId ? { ...i, quantity: clamped } : i)));
       const cartId = localStorage.getItem(CART_ID_KEY);
       if (!cartId) return;
       const { data: itemsRows, error } = await (await import('../lib/supabaseClient')).supabase
@@ -100,7 +121,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (error || !itemsRows) return;
       const target = itemsRows.find((r: any) => r.variant_id === variantId);
       if (target) await api.updateCartItemQuantity(target.id, clamped);
-    } catch (e) {}
+    } catch (e) {
+      const clamped = Math.max(1, qty);
+      setItems((prev) => prev.map((i) => (i.variantId === variantId ? { ...i, quantity: clamped } : i)));
+    }
   };
 
   const clear = async () => {

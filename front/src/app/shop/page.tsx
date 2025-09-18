@@ -1,8 +1,9 @@
 'use client'
 import ProductCard from "../../components/ProductCard";
-import { products } from "../../lib/data";
+import { fetchProducts } from "../../lib/supabaseApi";
 import { SearchIcon } from "../../components/icons";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import type { Product } from '../../lib/types';
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ShopPage() {
@@ -11,16 +12,24 @@ export default function ShopPage() {
   const rawQuery = searchParams.get("q") ?? "";
   const trimmedQuery = rawQuery.trim();
   const normalizedQuery = trimmedQuery.toLowerCase();
+  const [searchValue, setSearchValue] = useState(rawQuery);
+  const [productsState, setProductsState] = useState<Product[]>([]);
 
   const list = useMemo(
     () =>
       normalizedQuery
-        ? products.filter((product) => product.name.toLowerCase().includes(normalizedQuery))
-        : products,
-    [normalizedQuery]
+        ? productsState.filter((product) => product.name.toLowerCase().includes(normalizedQuery))
+        : productsState,
+    [normalizedQuery, productsState]
   );
 
-  const [searchValue, setSearchValue] = useState(rawQuery);
+  useEffect(() => {
+    let mounted = true;
+    fetchProducts()
+      .then((res) => { if (mounted) setProductsState(res); })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => {
     setSearchValue(rawQuery);

@@ -1,13 +1,15 @@
 "use client";
 import Link from 'next/link';
 import { useState } from 'react';
+import { useFavorites } from '../context/FavoritesContext';
 import type { Product } from '../lib/types';
 import { HeartIcon, CartIcon } from './icons';
 import { useCart } from '../context/CartContext';
 
 export default function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
-  const [fav, setFav] = useState(false);
+  const { isFavorite, toggle } = useFavorites();
+  const fav = isFavorite(product.id);
   const firstAvailable = product.sizes.find((s) => s.stock > 0)?.size ?? product.sizes[0].size;
 
   return (
@@ -18,7 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
         <button
           aria-label="Toggle favorite"
-          onClick={() => setFav((v) => !v)}
+          onClick={() => toggle(product.id)}
           className="absolute right-2 top-2 z-10 p-2 rounded-full bg-white/90 hover:bg-white text-rose-500"
         >
           <HeartIcon filled={fav} className="w-5 h-5" />

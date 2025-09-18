@@ -1,16 +1,33 @@
 "use client";
 import { notFound, useParams, useRouter } from 'next/navigation';
-import { getProduct } from '../../../lib/data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../../../context/CartContext';
+import { getProduct as fetchProduct } from '../../../lib/supabaseApi';
+import type { Product } from '../../../lib/types';
 
 export default function ProductDetail() {
   const params = useParams<{ id: string }>();
-  const product = getProduct(params.id);
   const router = useRouter();
   const { add } = useCart();
-  const [size, setSize] = useState(product?.sizes.find((s) => s.stock > 0)?.size ?? product?.sizes[0].size);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [size, setSize] = useState<number | undefined>(undefined);
 
+  useEffect(() => {
+    let mounted = true;
+    fetchProduct(params.id)
+      .then((p) => {
+        if (!mounted) return;
+        if (!p) return setProduct(null);
+        setProduct(p);
+        setSize(p.sizes.find((s) => s.stock > 0)?.size ?? p.sizes[0]?.size);
+      })
+      .catch(() => {})
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
+  }, [params.id]);
+
+  if (loading) return <div className="container py-8">Loading...</div>;
   if (!product) return notFound();
 
   const stock = product.sizes.find((s) => s.size === size)?.stock ?? 0;

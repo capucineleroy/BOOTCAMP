@@ -1,25 +1,30 @@
 export type Role = 'guest' | 'client' | 'seller' | 'admin';
 
 export interface ProductVariant {
-  size: number;
-  stock: number;
+  id: string; // product_variants.id
+  size: string; // DB: text
+  color: string; // DB: text
+  price: number; // DB: numeric
+  stock: number; // DB: integer
 }
 
 export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number; // in EUR
+  // price représentatif (ex: prix min des variants)
+  price: number;
   co2: number; // in kg CO2e
-  color: string;
+  color: string; // couleur par défaut pour affichage
+  colors?: string[];
   gender: 'M' | 'F' | 'U';
-  sizes: ProductVariant[];
+  sizes: ProductVariant[]; // liste de variants simplifiée
   images: string[]; // public URLs
+  brand: string;
 }
 
 export interface CartItem {
-  productId: string;
-  size: number;
+  variantId: string; // product_variants.id
   quantity: number;
 }
 

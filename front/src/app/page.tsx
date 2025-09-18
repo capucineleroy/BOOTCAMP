@@ -111,11 +111,6 @@ export default function Home() {
                       product.highlight ? "opacity-90" : ""
                     }`}
                   />
-                  {product.highlight ? (
-                    <button className="absolute bottom-6 right-6 flex items-center gap-2 rounded-full bg-[#015A52] px-4 py-2 text-sm font-medium text-white shadow-lg">
-                      <span className="text-lg leading-none">+</span> Quick Add
-                    </button>
-                  ) : null}
                 </div>
                 <div className="px-6 pb-6">
                   <h3 className="text-lg font-normal text-neutral-900 text-center">{product.name}</h3>

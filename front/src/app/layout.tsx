@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
+import { FavoritesProvider } from "../context/FavoritesContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -33,10 +34,12 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${geistMono.variable} antialiased bg-white text-neutral-900`}>
         <AuthProvider>
           <CartProvider>
-            <Navbar />
-            <main className="min-h-[70vh]">{children}</main>
-            <Footer />
-            <CartDrawer />
+            <FavoritesProvider>
+              <Navbar />
+              <main className="min-h-[70vh]">{children}</main>
+              <Footer />
+              <CartDrawer />
+            </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
       </body>

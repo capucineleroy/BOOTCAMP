@@ -74,7 +74,7 @@ export default function CartDrawer() {
                     </div>
 
                     <div className="mt-2 flex items-center justify-between">
-                      <div className="inline-flex items-center gap-2">
+                  <div className="inline-flex items-center gap-2">
                         <button
                           aria-label={`Decrease quantity for ${name}`}
                           className="px-2 py-1 rounded border disabled:opacity-40"
@@ -92,8 +92,9 @@ export default function CartDrawer() {
 
                         <button
                           aria-label={`Increase quantity for ${name}`}
-                          className="px-2 py-1 rounded border"
-                          onClick={() => setQuantity(item.variantId, (item.quantity ?? 1) + 1)}
+                      className="px-2 py-1 rounded border disabled:opacity-40"
+                      onClick={() => setQuantity(item.variantId, (item.quantity ?? 1) + 1)}
+                      disabled={(item.quantity ?? 1) >= (item.variant?.stock ?? Infinity)}
                         >
                           +
                         </button>

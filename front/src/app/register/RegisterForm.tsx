@@ -93,7 +93,7 @@ export function RegisterForm() {
     }
   };
 
-  const baseInputClasses = "mt-2 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-neutral-900 shadow-sm transition focus:border-[color:var(--color-brand-4)] focus:outline-none focus:ring-2 focus:ring-[color:var(--color-brand-4)]/40";
+  const baseInputClasses = "mt-2 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-neutral-900 shadow-sm transition focus:border-[#018D5B] focus:outline-none focus:ring-2 focus:ring-[#30c890]/30";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
@@ -219,7 +219,7 @@ export function RegisterForm() {
             type="checkbox"
             checked={consent}
             onChange={(event) => setConsent(event.target.checked)}
-            className="mt-1 h-4 w-4 rounded border border-neutral-300 text-[color:var(--color-brand-4)] focus:ring-[color:var(--color-brand-4)]"
+            className="mt-1 h-4 w-4 rounded border border-neutral-300 text-[#018D5B] focus:ring-[#02a56d]"
             aria-invalid={Boolean(fieldErrors.consent)}
             aria-describedby={fieldErrors.consent ? "consent-error" : undefined}
             required
@@ -247,7 +247,7 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-lg bg-gradient-to-r from-[color:var(--color-brand-4)] to-indigo-600 py-3 text-sm font-semibold text-white shadow-lg transition hover:from-indigo-500 hover:to-[color:var(--color-brand-4)] focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-lg bg-[#018D5B] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Envoi..." : "Envoyer la demande"}
       </button>

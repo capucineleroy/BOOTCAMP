@@ -11,6 +11,7 @@ export interface ProductVariant {
 export interface Product {
   id: string;
   name: string;
+  brand: string;
   description: string;
   // price représentatif (ex: prix min des variants)
   price: number;

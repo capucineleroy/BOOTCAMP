@@ -85,3 +85,18 @@ export function AwardIcon({ className = '' }: { className?: string }) {
 
 
 
+export function FilterIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 4h16l-6.5 8v5.2l-3.5 2.8V12L4 4z" />
+    </svg>
+  );
+}

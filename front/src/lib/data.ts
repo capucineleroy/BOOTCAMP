@@ -1,4 +1,4 @@
-import type { Product } from './types';
+import type { Product, ProductVariant } from './types';
 
 // Basic placeholder image paths available in /public
 const PLACEHOLDER = '/adidas.avif';
@@ -23,9 +23,15 @@ function random<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function genSizes(): { size: number; stock: number }[] {
+function genSizes(productId: string, price: number): ProductVariant[] {
   const base = [38, 39, 40, 41, 42, 43, 44, 45];
-  return base.map((s) => ({ size: s, stock: Math.floor(Math.random() * 10) + 0 }));
+  return base.map((s, idx) => ({
+    id: `${productId}-v-${idx + 1}`,
+    size: String(s),
+    color: '',
+    price,
+    stock: Math.floor(Math.random() * 10),
+  }));
 }
 
 export const products: Product[] = Array.from({ length: 100 }).map((_, i) => {
@@ -45,9 +51,11 @@ export const products: Product[] = Array.from({ length: 100 }).map((_, i) => {
     price,
     co2,
     color,
+    colors: [color],
     gender,
-    sizes: genSizes(),
+    sizes: genSizes(`p-${i + 1}`, price),
     images: [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER],
+    brand: 'Generic',
   } satisfies Product;
 });
 

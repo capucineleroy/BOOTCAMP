@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="bg-white">
@@ -32,19 +34,19 @@ export default function Footer() {
           <h4 className="mb-2 font-semibold text-neutral-950">Mentions legales</h4>
           <ul className="space-y-1">
             <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+              <Link href="/mentions-legales" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
                 Mentions legales
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Politique de confidentialite (RGPD)
-              </a>
+              <Link href="/politique-de-confidentialite" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Politique de confidentialite
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Conditions d'utilisation
-              </a>
+              <Link href="/conditions-de-vente" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Conditions de vente
+              </Link>
             </li>
           </ul>
         </div>

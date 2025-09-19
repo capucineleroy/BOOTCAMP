@@ -1,30 +1,63 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function LoginPage() {
-  const { login } = useAuth();
+export default function ResetPasswordPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    if (hash.includes("type=recovery")) {
+      supabase.auth.onAuthStateChange((_event, session) => {
+        if (!session) {
+          supabase.auth.getSession().then(({ data }) => {
+            if (!data.session) {
+              setError("Lien invalide ou expir?.");
+            }
+          });
+        }
+      });
+    } else {
+      setError("Lien de r?initialisation invalide.");
+    }
+  }, []);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormError(null);
-    setLoading(true);
+    setError(null);
 
+    if (password.length < 6) {
+      setError("Le mot de passe doit comporter au moins 6 caract?res.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      await login(email.trim(), password);
-      router.replace("/");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Identifiants invalides.";
-      setFormError(message);
+      const { error: resetError } = await supabase.auth.updateUser({ password });
+      if (resetError) {
+        throw resetError;
+      }
+      setSuccess(true);
+      setTimeout(() => {
+        router.replace("/login");
+      }, 2000);
+    } catch (submitError) {
+      const message = submitError instanceof Error ? submitError.message : "Impossible de mettre ? jour le mot de passe.";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -45,56 +78,54 @@ export default function LoginPage() {
       <div className="flex w-full items-center justify-center px-6 py-12 shadow-lg sm:px-12 lg:order-first lg:w-1/2 lg:bg-white lg:text-neutral-900 lg:px-16">
         <div className="w-full max-w-md">
           <Link
-            href="/"
+            href="/login"
             className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Retour a l'accueil
+            Retour ? la connexion
           </Link>
           <div className="mb-8">
-            <h1 className="text-3xl font-semibold text-neutral-900">Connexion</h1>
+            <h1 className="text-3xl font-semibold text-neutral-900">D?finir un nouveau mot de passe</h1>
             <p className="mt-3 text-sm text-neutral-500">
-              Accedez a votre espace pour suivre vos commandes et profiter de notre marque.
+              Saisissez votre nouveau mot de passe puis confirmez-le.
             </p>
           </div>
           <form onSubmit={submit} className="space-y-5" noValidate>
             <div>
-              <label htmlFor="email" className="text-sm font-medium text-neutral-700">
-                Email
+              <label htmlFor="newPassword" className="text-sm font-medium text-neutral-700">
+                Nouveau mot de passe
               </label>
               <input
-                id="email"
-                name="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                type="email"
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 className="mt-2 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-neutral-900 shadow-sm transition focus:border-[#018D5B] focus:outline-none focus:ring-2 focus:ring-[#30c890]/30"
-                autoComplete="email"
                 required
               />
             </div>
             <div>
-              <label htmlFor="password" className="text-sm font-medium text-neutral-700">
-                Mot de passe
+              <label htmlFor="confirmPassword" className="text-sm font-medium text-neutral-700">
+                Confirmer le mot de passe
               </label>
               <input
-                id="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
                 className="mt-2 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-neutral-900 shadow-sm transition focus:border-[#018D5B] focus:outline-none focus:ring-2 focus:ring-[#30c890]/30"
-                autoComplete="current-password"
                 required
               />
-              <div className="mt-2 text-right">
-                <Link href="/forgot-password" className="text-xs font-semibold text-[#018D5B] transition hover:text-[#02a56d]">
-                  Mot de passe oublie ?
-                </Link>
-              </div>
             </div>
-            {formError ? (
+            {error ? (
               <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
-                {formError}
+                {error}
+              </p>
+            ) : null}
+            {success ? (
+              <p role="status" className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                Mot de passe mis ? jour. Redirection vers la connexion...
               </p>
             ) : null}
             <button
@@ -102,18 +133,9 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full rounded-lg bg-[#018D5B] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Connexion..." : "Se connecter"}
+              {loading ? "Mise ? jour..." : "Mettre ? jour"}
             </button>
           </form>
-          <p className="mt-6 text-sm text-neutral-500">
-            Pas encore de compte ?
-            <Link href="/register" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
-              Creer un compte
-            </Link>
-          </p>
-          <p className="mt-4 text-xs text-neutral-400">
-            Astuce: utilisez admin@example.com ou seller@example.com pour tester la navigation selon le role.
-          </p>
         </div>
       </div>
     </div>

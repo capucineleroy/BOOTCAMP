@@ -6,6 +6,7 @@ import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import { FavoritesProvider } from "../context/FavoritesContext";
 import LayoutShell from "../components/LayoutShell";
+import CookieConsent from "../components/CookieConsent";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sneco — Minimal Sneakers",
+  title: "Sneco - Minimal Sneakers",
   description: "Modern minimalist sneakers e-commerce demo",
 };
 
@@ -36,6 +37,7 @@ export default function RootLayout({
             <FavoritesProvider>
               <LayoutShell>{children}</LayoutShell>
               <CartDrawer />
+              <CookieConsent />
             </FavoritesProvider>
           </CartProvider>
         </AuthProvider>

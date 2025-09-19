@@ -3,28 +3,34 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function LoginPage() {
-  const { login } = useAuth();
-  const router = useRouter();
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormError(null);
+    setError(null);
+    setSuccess(false);
     setLoading(true);
 
     try {
-      await login(email.trim(), password);
-      router.replace("/");
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Identifiants invalides.";
-      setFormError(message);
+      const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/reset-password` : undefined;
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo,
+      });
+
+      if (resetError) {
+        throw resetError;
+      }
+
+      setSuccess(true);
+    } catch (submitError) {
+      const message = submitError instanceof Error ? submitError.message : "Impossible d'envoyer le lien de reinitialisation.";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -45,15 +51,15 @@ export default function LoginPage() {
       <div className="flex w-full items-center justify-center px-6 py-12 shadow-lg sm:px-12 lg:order-first lg:w-1/2 lg:bg-white lg:text-neutral-900 lg:px-16">
         <div className="w-full max-w-md">
           <Link
-            href="/"
+            href="/login"
             className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Retour a l'accueil
+            Retour a la connexion
           </Link>
           <div className="mb-8">
-            <h1 className="text-3xl font-semibold text-neutral-900">Connexion</h1>
+            <h1 className="text-3xl font-semibold text-neutral-900">Mot de passe oublie</h1>
             <p className="mt-3 text-sm text-neutral-500">
-              Accedez a votre espace pour suivre vos commandes et profiter de notre marque.
+              Saisissez l'adresse email associee a votre compte Sneco. Nous vous enverrons un lien pour reinitialiser votre mot de passe.
             </p>
           </div>
           <form onSubmit={submit} className="space-y-5" noValidate>
@@ -72,29 +78,14 @@ export default function LoginPage() {
                 required
               />
             </div>
-            <div>
-              <label htmlFor="password" className="text-sm font-medium text-neutral-700">
-                Mot de passe
-              </label>
-              <input
-                id="password"
-                name="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                type="password"
-                className="mt-2 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-neutral-900 shadow-sm transition focus:border-[#018D5B] focus:outline-none focus:ring-2 focus:ring-[#30c890]/30"
-                autoComplete="current-password"
-                required
-              />
-              <div className="mt-2 text-right">
-                <Link href="/forgot-password" className="text-xs font-semibold text-[#018D5B] transition hover:text-[#02a56d]">
-                  Mot de passe oublie ?
-                </Link>
-              </div>
-            </div>
-            {formError ? (
+            {error ? (
               <p role="alert" className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-600">
-                {formError}
+                {error}
+              </p>
+            ) : null}
+            {success ? (
+              <p role="status" className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                Nous avons envoye un email de reinitialisation. Verifiez votre boite de reception.
               </p>
             ) : null}
             <button
@@ -102,18 +93,9 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full rounded-lg bg-[#018D5B] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? "Connexion..." : "Se connecter"}
+              {loading ? "Envoi en cours..." : "Envoyer le lien"}
             </button>
           </form>
-          <p className="mt-6 text-sm text-neutral-500">
-            Pas encore de compte ?
-            <Link href="/register" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
-              Creer un compte
-            </Link>
-          </p>
-          <p className="mt-4 text-xs text-neutral-400">
-            Astuce: utilisez admin@example.com ou seller@example.com pour tester la navigation selon le role.
-          </p>
         </div>
       </div>
     </div>

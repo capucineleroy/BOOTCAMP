@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -9,8 +10,8 @@ export default function CartDrawer() {
   const { isOpen, close, detailed, subtotal, setQuantity, remove } = useCart();
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") close();
     };
     if (isOpen) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -22,10 +23,7 @@ export default function CartDrawer() {
   };
 
   return (
-    <div
-      aria-hidden={!isOpen}
-      className={`fixed inset-0 z-50 ${isOpen ? "" : "pointer-events-none"}`}
-    >
+    <div aria-hidden={!isOpen} className={`fixed inset-0 z-50 ${isOpen ? "" : "pointer-events-none"}`}>
       <div
         className={`absolute inset-0 bg-black/30 transition-opacity ${isOpen ? "opacity-100" : "opacity-0"}`}
         onClick={close}
@@ -35,49 +33,47 @@ export default function CartDrawer() {
       <aside
         role="dialog"
         aria-label="Shopping cart"
-        className={`fixed inset-y-0 right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-xl transition-transform ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 top-0 h-full w-full bg-white shadow-xl transition-transform sm:w-[420px] ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-b-[#E6E6E6]">
-          <h2 className="text-lg font-semibold text-[#015A52]">Your Cart</h2>
-          <button onClick={close} className="text-sm text-neutral-600 hover:text-neutral-900" aria-label="Close cart">
-            Close
+        <div className="flex items-center justify-between border-b border-b-[#E6E6E6] p-4">
+          <h2 className="text-lg font-semibold text-[#014545]">Votre panier</h2>
+          <button onClick={close} className="text-sm text-neutral-600 hover:text-neutral-900" aria-label="Fermer le panier">
+            Fermer
           </button>
         </div>
 
-        {/* Content */}
-        <div className="flex flex-col h-full">
-          <div className="p-4 space-y-4 overflow-y-auto" style={{ maxHeight: "calc(100% - 9.5rem)" }}>
-            {detailed.length === 0 && <p className="text-sm text-neutral-600">Your cart is empty.</p>}
+        <div className="flex h-full flex-col">
+          <div className="space-y-4 overflow-y-auto p-4" style={{ maxHeight: "calc(100% - 9.5rem)" }}>
+            {detailed.length === 0 ? <p className="text-sm text-neutral-600">Votre panier est vide.</p> : null}
 
             {detailed.map((item) => {
-              const img = item.product?.images?.[0] ?? "";
-              const name = item.product?.name ?? "Product";
+              const image = item.product?.images?.[0] ?? "";
+              const name = item.product?.name ?? "Produit";
               const price = (item.variant?.price ?? 0) * (item.quantity ?? 0);
 
               return (
-                <div key={item.variantId} className="flex gap-3 border rounded-lg p-3">
+                <div key={item.variantId} className="flex gap-3 rounded-lg border p-3">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={img}
+                    src={image}
                     alt={name}
-                    onError={(e) => ((e.target as HTMLImageElement).src = "/placeholder.png")}
-                    className="w-16 h-16 object-cover rounded"
+                    onError={(event) => ((event.target as HTMLImageElement).src = "/placeholder.png")}
+                    className="h-16 w-16 rounded object-cover"
                   />
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="text-sm font-medium">{name}</div>
-                        <div className="text-xs text-neutral-500">Taille {item.variant?.size ?? "-"} · {item.variant?.color ?? "-"}</div>
+                        <div className="text-xs text-neutral-500">Taille {item.variant?.size ?? "-"} / {item.variant?.color ?? "-"}</div>
                       </div>
-                      <div className="text-sm">{price.toFixed(0)} €</div>
+                      <div className="text-sm">{price.toFixed(0)} EUR</div>
                     </div>
 
                     <div className="mt-2 flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2">
+                      <div className="inline-flex items-center gap-2">
                         <button
-                          aria-label={`Decrease quantity for ${name}`}
-                          className="px-2 py-1 rounded border disabled:opacity-40"
+                          aria-label={`Diminuer la quantite pour ${name}`}
+                          className="rounded border px-2 py-1 disabled:opacity-40"
                           onClick={() => {
                             const next = (item.quantity ?? 1) - 1;
                             if (next <= 0) remove(item.variantId);
@@ -87,14 +83,12 @@ export default function CartDrawer() {
                         >
                           -
                         </button>
-
-                        <span className="text-sm w-6 text-center">{item.quantity}</span>
-
+                        <span className="w-6 text-center text-sm">{item.quantity}</span>
                         <button
-                          aria-label={`Increase quantity for ${name}`}
-                      className="px-2 py-1 rounded border disabled:opacity-40"
-                      onClick={() => setQuantity(item.variantId, (item.quantity ?? 1) + 1)}
-                      disabled={(item.quantity ?? 1) >= (item.variant?.stock ?? Infinity)}
+                          aria-label={`Augmenter la quantite pour ${name}`}
+                          className="rounded border px-2 py-1 disabled:opacity-40"
+                          onClick={() => setQuantity(item.variantId, (item.quantity ?? 1) + 1)}
+                          disabled={(item.quantity ?? 1) >= (item.variant?.stock ?? Number.MAX_SAFE_INTEGER)}
                         >
                           +
                         </button>
@@ -103,9 +97,9 @@ export default function CartDrawer() {
                       <button
                         className="text-xs text-rose-600"
                         onClick={() => remove(item.variantId)}
-                        aria-label={`Remove ${name} from cart`}
+                        aria-label={`Retirer ${name} du panier`}
                       >
-                        Remove
+                        Retirer
                       </button>
                     </div>
                   </div>
@@ -114,25 +108,23 @@ export default function CartDrawer() {
             })}
           </div>
 
-          {/* Footer / Total */}
-          <div className="border-t-2 border-[#015A52] bg-white p-4">
-            <div className="flex items-center justify-between mb-3">
+          <div className="border-t-2 border-[#014545] bg-white p-4">
+            <div className="mb-3 flex items-center justify-between">
               <span className="text-sm text-neutral-600">Total</span>
-              <span className="text-base font-semibold">{(subtotal ?? 0).toFixed(0)} €</span>
+              <span className="text-base font-semibold">{(subtotal ?? 0).toFixed(0)} EUR</span>
             </div>
 
             <button
               onClick={handleCheckout}
               disabled={detailed.length === 0}
-              className="w-full py-3 rounded-lg bg-[#015A52] text-white hover:opacity-95 disabled:opacity-50"
+              className="w-full rounded-lg bg-[#014545] py-3 text-white transition hover:opacity-95 disabled:opacity-50"
             >
-              Checkout
+              Passer au paiement
             </button>
 
-            {/* small link backup (accessible) */}
             <div className="mt-2 text-center">
               <Link href="/shop" onClick={close} className="text-sm text-neutral-600 hover:underline">
-                Continue shopping
+                Continuer les achats
               </Link>
             </div>
           </div>

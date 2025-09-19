@@ -50,7 +50,7 @@ export default function BrandPage() {
               href="/shop"
               className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#014545] transition hover:bg-white/90"
             >
-              Decouvrir nos produits
+              Découvrir nos produits
             </Link>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function BrandPage() {
           </div>
           <div className="space-y-6">
             <span className="text-sm font-semibold uppercase tracking-wide text-[#014545]">Engagement eco-responsable</span>
-            <h2 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">Reduire, recycler, reparer</h2>
+            <h2 className="text-3xl font-semibold text-neutral-900 sm:text-4xl">Réduire, recycler, réparer</h2>
             <p className="text-base leading-relaxed text-neutral-600 sm:text-lg">
                L’impact de Sneco se mesure dans les gestes du quotidien : réparer plutôt que jeter, recycler plutôt que polluer, donner plutôt qu’accumuler. Nos partenaires assurent une gestion responsable des paires usées, et notre compteur solidaire permet de suivre en temps réel les bénéfices reversés, les sneakers sauvées et les dons effectués. Ensemble, nous prouvons que chaque sneaker peut avoir plusieurs vies.
             </p>
@@ -128,7 +128,7 @@ export default function BrandPage() {
 
       <section className="bg-[#014545] py-16">
         <div className="mx-auto max-w-4xl space-y-6 px-6 text-center text-white sm:px-10">
-          <h2 className="text-3xl font-semibold sm:text-4xl">Pret a rejoindre l'aventure Sneco ?</h2>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Pret à rejoindre l'aventure Sneco ?</h2>
           <p className="text-base leading-relaxed text-white/80 sm:text-lg">
             Explorez nos collections, découvrez notre service de réparation solidaire et participez à une aventure où vos sneakers prennent un sens nouveau. Chez Sneco, votre style peut aussi devenir un geste pour la planète et pour la société.
           </p>

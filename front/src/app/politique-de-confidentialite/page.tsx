@@ -1,39 +1,39 @@
 const SECTIONS = [
   {
-    title: "1. Donnees collectees",
+    title: "1. données collectées",
     body: [
-      "Sneco collecte les informations necessaires a la creation d'un compte client et a la realisation des commandes : nom, prenom, adresse email, mot de passe.",
+      "Sneco collecte les informations nécessaires à la création d'un compte client et à la réalisation des commandes : nom, prénom, adresse email, mot de passe.",
     ],
   },
   {
-    title: "2. Finalite des traitements",
+    title: "2. Finalité des traitements",
     body: [
-      "Les donnees collectees sont utilisees pour gerer les commandes et les livraisons, gerer les comptes clients, communiquer avec les utilisateurs concernant leur commande et securiser les paiements.",
+      "Les données collectées sont utilisées pour gérer les commandes et les livraisons, gérer les comptes clients, communiquer avec les utilisateurs concernant leur commande et sécuriser les paiements.",
     ],
   },
   {
-    title: "3. Partage des donnees",
+    title: "3. Partage des données",
     body: [
-      "Les donnees personnelles ne sont jamais revendues a des tiers. Elles sont uniquement partagees avec le prestataire de paiement Stripe et les prestataires de livraison dans le cadre de l'execution du service.",
+      "Les données personnelles ne sont jamais revendues à des tiers. Elles sont uniquement partagées avec le prestataire de paiement Stripe et les prestataires de livraison dans le cadre de l'exécution du service.",
     ],
   },
   {
-    title: "4. Duree de conservation",
+    title: "4. Durée de conservation",
     body: [
-      "Les donnees sont conservees tant que le compte client est actif. L'utilisateur peut demander la suppression de son compte et de ses donnees par simple email a sneco@gmail.com.",
+      "Les données sont conservées tant que le compte client est actif. L'utilisateur peut demander la suppression de son compte et de ses données par simple email à sneco@gmail.com.",
     ],
   },
   {
     title: "5. Securite",
     body: [
-      "Sneco met en place des mesures techniques et organisationnelles pour proteger les donnees contre toute perte, utilisation abusive ou acces non autorise.",
+      "Sneco met en place des mesures techniques et organisationnelles pour protéger les données contre toute perte, utilisation abusive ou accès non autorisé.",
     ],
   },
   {
     title: "6. Droits des utilisateurs",
     body: [
-      "Conformement au RGPD, chaque utilisateur dispose d'un droit d'acces, de rectification, d'opposition et de suppression de ses donnees.",
-      "Pour exercer ces droits, il suffit d'envoyer une demande a sneco@gmail.com.",
+      "Conformement au RGPD, chaque utilisateur dispose d'un droit d'accès, de rectification, d'opposition et de suppression de ses données.",
+      "Pour exercer ces droits, il suffit d'envoyer une demande à sneco@gmail.com.",
     ],
   },
 ];
@@ -43,10 +43,10 @@ export default function PolitiqueDeConfidentialitePage() {
     <div className="bg-neutral-50">
       <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         <header className="mb-10">
-          <p className="text-xs uppercase tracking-[0.3em] text-[#014545]">Protection des donnees</p>
-          <h1 className="mt-3 text-4xl font-semibold text-neutral-900">Politique de confidentialite</h1>
+          <p className="text-xs uppercase tracking-[0.3em] text-[#014545]">Protection des données</p>
+          <h1 className="mt-3 text-4xl font-semibold text-neutral-900">Politique de confidentialité</h1>
           <p className="mt-2 text-sm text-neutral-600">
-            Cette politique detaille la facon dont Sneco collecte, utilise et protege vos donnees personnelles.
+            Cette politique détaille la façon dont Sneco collecte, utilise et protège vos données personnelles.
           </p>
         </header>
 

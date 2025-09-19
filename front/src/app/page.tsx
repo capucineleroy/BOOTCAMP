@@ -125,12 +125,12 @@ export default async function Home() {
     <div className="container py-20">
           <div className="grid gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
             <div>
-              <span className="inline-flex rounded-full bg-[#015A52]/10 px-3 py-1 text-xs font-medium text-[#015A52]">À propos de Sneaco</span>
+              <span className="inline-flex rounded-full bg-[#015A52]/10 px-3 py-1 text-xs font-medium text-[#015A52]">À propos de Sneco</span>
               <h2 className="mt-4 text-3xl md:text-4xl font-semibold tracking-tight">
                 Conçues pour le coureur responsable
               </h2>
               <p className="mt-6 text-neutral-600">
-                Chez SNEACO, nous pensons que la performance premium ne doit jamais se faire au détriment de la planète. Chaque paire est fabriquée
+                Chez SNECO, nous pensons que la performance premium ne doit jamais se faire au détriment de la planète. Chaque paire est fabriquée
                 avec des mat&eacute;riaux durables et selon des pratiques de production &eacute;thiques.
               </p>
               <p className="mt-4 text-neutral-600">

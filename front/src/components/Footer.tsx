@@ -7,7 +7,7 @@ export default function Footer() {
         <div>
           <h4 className="mb-2 font-semibold text-neutral-950">A propos</h4>
           <p className="leading-relaxed">
-            Minimalist sneakers designed in Europe with a focus on sustainability and timeless style.
+            Nous créons des sneakers minimalistes en Europe, avec un engagement fort pour la durabilité et un design qui traverse le temps.
           </p>
         </div>
         <div>
@@ -31,16 +31,16 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="mb-2 font-semibold text-neutral-950">Mentions legales</h4>
+          <h4 className="mb-2 font-semibold text-neutral-950">Mentions légales</h4>
           <ul className="space-y-1">
             <li>
               <Link href="/mentions-legales" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Mentions legales
+                Mentions légales
               </Link>
             </li>
             <li>
               <Link href="/politique-de-confidentialite" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Politique de confidentialite
+                Politique de confidentialité
               </Link>
             </li>
             <li>

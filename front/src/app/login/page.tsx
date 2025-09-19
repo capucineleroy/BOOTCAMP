@@ -48,12 +48,12 @@ export default function LoginPage() {
             href="/"
             className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Retour a l'accueil
+            Retour à l'accueil
           </Link>
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-neutral-900">Connexion</h1>
             <p className="mt-3 text-sm text-neutral-500">
-              Accedez a votre espace pour suivre vos commandes et profiter de notre marque.
+              Accedez à votre espace pour suivre vos commandes et profiter de notre marque.
             </p>
           </div>
           <form onSubmit={submit} className="space-y-5" noValidate>
@@ -108,7 +108,7 @@ export default function LoginPage() {
           <p className="mt-6 text-sm text-neutral-500">
             Pas encore de compte ?
             <Link href="/register" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
-              Creer un compte
+              Créer un compte
             </Link>
           </p>
           <p className="mt-4 text-xs text-neutral-400">

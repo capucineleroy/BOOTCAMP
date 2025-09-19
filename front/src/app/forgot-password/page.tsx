@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
 
       setSuccess(true);
     } catch (submitError) {
-      const message = submitError instanceof Error ? submitError.message : "Impossible d'envoyer le lien de reinitialisation.";
+      const message = submitError instanceof Error ? submitError.message : "Impossible d'envoyer le lien de réinitialisation.";
       setError(message);
     } finally {
       setLoading(false);
@@ -54,12 +54,12 @@ export default function ForgotPasswordPage() {
             href="/login"
             className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Retour a la connexion
+            Retour à la connexion
           </Link>
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-neutral-900">Mot de passe oublie</h1>
             <p className="mt-3 text-sm text-neutral-500">
-              Saisissez l'adresse email associee a votre compte Sneco. Nous vous enverrons un lien pour reinitialiser votre mot de passe.
+              Saisissez l'adresse email associée à votre compte Sneco. Nous vous enverrons un lien pour réinitialiser votre mot de passe.
             </p>
           </div>
           <form onSubmit={submit} className="space-y-5" noValidate>
@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
             ) : null}
             {success ? (
               <p role="status" className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
-                Nous avons envoye un email de reinitialisation. Verifiez votre boite de reception.
+                Nous avons envoyé un email de réinitialisation. Vérifiez votre boîte de réception.
               </p>
             ) : null}
             <button

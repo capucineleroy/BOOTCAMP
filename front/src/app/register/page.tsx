@@ -21,17 +21,17 @@ export default function RegisterPage() {
             href="/"
             className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
           >
-            Retour a l'accueil
+            Retour à l'accueil
           </Link>
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-neutral-900">Creer un compte</h1>
             <p className="mt-3 text-sm text-neutral-500">
-              Renseignez vos informations pour acceder a vos achats responsables, suivre vos retours et recevoir nos actualites.
+              Renseignez vos informations pour accéder à vos achats responsables, suivre vos retours et recevoir nos actualités.
             </p>
           </div>
           <RegisterForm />
           <p className="mt-6 text-sm text-neutral-500">
-            Deja inscrit ?
+            Déjà inscrit ?
             <Link href="/login" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
               Se connecter
             </Link>

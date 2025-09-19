@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const co2 = useMemo(() => co2Index(product.id), [product.id]);
 
   return (
-    <div className="group rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100">
+    <Link href={`/product/${product.id}`} className="group block rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
       <div className="relative aspect-square overflow-hidden">
         <div className="absolute left-2 top-2 z-10 text-xs bg-white/90 backdrop-blur rounded px-2 py-1 text-emerald-700 font-medium">
           {co2} g CO₂e
@@ -35,6 +35,8 @@ export default function ProductCard({ product }: { product: Product }) {
           aria-label="Toggle favorite"
           onClick={() => toggle(product.id)}
           className="absolute right-2 top-2 z-10 p-2 rounded-full bg-white/90 hover:bg-white text-rose-500"
+          onMouseDown={(e) => e.preventDefault()}
+          onClickCapture={(e) => e.preventDefault()}
         >
           <HeartIcon filled={fav} className="w-5 h-5" />
         </button>
@@ -54,14 +56,12 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="p-4">
-        <Link href={`/product/${product.id}`} className="block">
-          <h3 className="text-sm font-medium text-neutral-900 line-clamp-1">
-            {product.brand} {product.name}
-          </h3>
-          <p className="text-sm text-neutral-600 line-clamp-2">
-            {product.sizes.length} tailles disponibles
-          </p>
-        </Link>
+        <h3 className="text-sm font-medium text-neutral-900 line-clamp-1">
+          {product.brand} {product.name}
+        </h3>
+        <p className="text-sm text-neutral-600 line-clamp-2">
+          {product.sizes.length} tailles disponibles
+        </p>
 
         <div className="mt-1 flex items-center justify-between">
           <span className="text-neutral-600 text-sm">
@@ -69,15 +69,12 @@ export default function ProductCard({ product }: { product: Product }) {
           </span>
 
           <div className="flex items-center gap-2">
-            <Link
-              href={`/product/${product.id}`}
-              className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-[color:var(--color-brand-3)] text-white hover:opacity-90"
-            >
-              Voir le produit
-            </Link>
+            <span className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-[color:var(--color-brand-3)] text-white">
+              Voir le modèle
+            </span>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

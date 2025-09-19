@@ -1,6 +1,7 @@
 "use client";
 import { notFound, useParams, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import ProductCard from "../../../components/ProductCard";
 import { useCart } from "../../../context/CartContext";
 import { fetchProducts, getProduct as fetchProduct } from "../../../lib/supabaseApi";
 import type { Product, ProductVariant } from "../../../lib/types";
@@ -148,6 +149,17 @@ export default function ProductDetail() {
     return () => { mounted = false; };
   }, [product?.id, product?.brand]);
 
+  // CO2 index same as ProductCard
+  const co2Index = (seed: string | number) => {
+    const s = String(seed);
+    let hash = 0;
+    for (let i = 0; i < s.length; i++) {
+      hash = s.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash % 46) + 5; // range 5–50
+  };
+  const co2 = useMemo(() => co2Index((product?.id ?? params.id) as string), [product?.id, params.id]);
+
   if (loading) return <div className="container py-8">Loading...</div>;
   if (!product) return notFound();
 
@@ -158,7 +170,7 @@ export default function ProductDetail() {
       <div className="grid md:grid-cols-2 gap-8 items-start">
         {/* Single image only (left column) */}
         <div className="flex flex-col gap-4">
-          <div ref={mainImageRef} className="aspect-[4/3] rounded-xl overflow-hidden border">
+          <div ref={mainImageRef} className="aspect-[4/3] rounded-xl overflow-hidden">
             <img src={mainImageSrc ?? product.images[0]} alt={product.name} className="w-full h-full object-cover" />
           </div>
         </div>
@@ -167,8 +179,8 @@ export default function ProductDetail() {
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl md:text-4xl font-bold leading-tight">{product.brand} {product.name}</h1>
           <div className="mt-2 text-3xl font-extrabold text-neutral-900">{product.price.toFixed(0)} €</div>
-          <div className="w-fit inline-flex text-sm bg-white border rounded px-2 py-1 text-emerald-700">
-            {product.co2} kg CO₂e
+           <div className="w-fit inline-flex text-sm bg-white border rounded px-2 py-1 text-emerald-700">
+             {co2} g CO₂e
           </div>
           {/* Sizes (independent; disable invalid combos for current color) */}
           <div>
@@ -199,7 +211,6 @@ export default function ProductDetail() {
               {(colors.length ? colors : (product.colors ?? [product.color])).map((c) => {
                 const combo = product.sizes.find((v) => String(v.size) === String(size) && v.color === c);
                 const disabled = !combo || combo.stock === 0;
-                const stockBadge = combo ? combo.stock : 0;
                 return (
                   <button
                     key={c}
@@ -210,9 +221,6 @@ export default function ProductDetail() {
                     className={`relative w-8 h-8 rounded-full border-2 ${color === c ? 'ring-2 ring-offset-2 ring-neutral-900' : ''} ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
                     style={{ backgroundColor: c }}
                   >
-                    <span className="absolute -bottom-1 -right-1 min-w-[18px] px-1 h-4 rounded-full bg-white border text-[10px] leading-4 text-neutral-700">
-                      {stockBadge}
-                    </span>
                   </button>
                 );
               })}
@@ -263,14 +271,7 @@ export default function ProductDetail() {
         ) : similar.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {similar.map((p) => (
-              <a key={p.id} href={`/product/${p.id}`} className="block group border rounded-lg overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.images?.[0] ?? '/placeholder.png'} alt={p.name} className="aspect-square w-full object-cover group-hover:opacity-95" />
-                <div className="p-2">
-                  <div className="text-sm font-medium line-clamp-1">{p.brand} {p.name}</div>
-                  <div className="text-sm text-neutral-600">{p.price.toFixed(0)} €</div>
-                </div>
-              </a>
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         ) : (

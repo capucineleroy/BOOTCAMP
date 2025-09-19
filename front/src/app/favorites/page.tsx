@@ -1,12 +1,37 @@
 "use client";
-import { useFavorites } from '../../context/FavoritesContext';
-import { products } from '../../lib/data';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useFavorites } from '../../context/FavoritesContext';
+import ProductCard from '../../components/ProductCard';
+import type { Product } from '../../lib/types';
+import { getProduct as fetchProduct } from '../../lib/supabaseApi';
 
 export default function FavoritesPage() {
   const { ids, toggle, clear } = useFavorites();
+  const [loading, setLoading] = useState(false);
+  const [favs, setFavs] = useState<Product[]>([]);
 
-  const favs = products.filter((p) => ids.includes(p.id));
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      try {
+        setLoading(true);
+        if (!ids.length) {
+          if (mounted) setFavs([]);
+          return;
+        }
+        const results = await Promise.all(ids.map(async (id) => {
+          try { return await fetchProduct(id); } catch { return null; }
+        }));
+        const items = results.filter((p): p is Product => !!p);
+        if (mounted) setFavs(items);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [ids]);
 
   return (
     <div className="container py-12">
@@ -21,7 +46,19 @@ export default function FavoritesPage() {
         </div>
       </div>
 
-      {favs.length === 0 ? (
+      {loading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="animate-pulse rounded-xl border overflow-hidden">
+              <div className="h-56 w-full bg-neutral-200" />
+              <div className="p-4 space-y-2">
+                <div className="h-4 bg-neutral-200 rounded w-2/3" />
+                <div className="h-4 bg-neutral-200 rounded w-1/3" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : favs.length === 0 ? (
         <div className="rounded-xl border p-8 text-center">
           <p className="text-neutral-600">Vous n'avez pas encore ajouté de favoris.</p>
           <Link href="/shop" className="mt-4 inline-block text-sm px-4 py-2 rounded bg-[color:var(--color-brand-3)] text-white">Voir la collection</Link>
@@ -29,22 +66,7 @@ export default function FavoritesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {favs.map((p) => (
-            <article key={p.id} className="group rounded-xl border overflow-hidden">
-              <Link href={`/product/${p.id}`} className="block relative h-56 bg-[color:var(--color-brand-1)]" style={{ backgroundColor: p.color }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </Link>
-              <div className="p-4 flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-medium">{p.name}</h3>
-                  <div className="text-xs text-neutral-600">{p.price.toFixed(0)} €</div>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <button onClick={() => toggle(p.id)} className="text-sm text-rose-600">Retirer</button>
-                  <Link href={`/product/${p.id}`} className="text-sm px-3 py-1 rounded bg-[color:var(--color-brand-3)] text-white">Voir</Link>
-                </div>
-              </div>
-            </article>
+            <ProductCard key={p.id} product={p} />
           ))}
         </div>
       )}

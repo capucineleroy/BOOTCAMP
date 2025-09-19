@@ -192,7 +192,7 @@ export default function ProductDetail() {
   };
   const co2 = useMemo(() => co2Index((product?.id ?? params.id) as string), [product?.id, params.id]);
 
-  if (loading) return <div className="container py-8">Loading...</div>;
+  if (loading) return <div className="container py-8">Chargement...</div>;
   if (!product) return notFound();
 
   const stock = selectedVariant?.stock ?? 0;

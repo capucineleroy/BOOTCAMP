@@ -5,6 +5,7 @@ import { FilterIcon, SearchIcon } from "../../components/icons";
 import { ChangeEvent, FocusEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import type { Product } from "../../lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
+import FiltersContent from "../../components/FiltersContent";
 
 export default function ShopPage() {
   const router = useRouter();
@@ -260,119 +261,122 @@ export default function ShopPage() {
     minPrice !== priceBounds.min ||
     maxPrice !== priceBounds.max;
 
-  const FiltersContent = () => (
-    <div className="space-y-8">
-      <section>
-        <h3 className="text-sm font-semibold text-neutral-900">Genre</h3>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {filterOptions.categories.map((category) => {
-            const isSelected = selectedCategories.includes(category);
-            const label = categoryLabels[category] ?? category;
-            return (
-              <button
-                type="button"
-                key={category}
-                onClick={() => toggleCategory(category)}
-                className={`rounded-full border px-3 py-1 text-sm transition ${
-                  isSelected
-                    ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
-                    : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-          {!filterOptions.categories.length && (
-            <p className="text-xs text-neutral-400">Aucun genre disponible.</p>
-          )}
-        </div>
-      </section>
 
-      <section>
-        <h3 className="text-sm font-semibold text-neutral-900">Marque</h3>
-        <div className="mt-3 space-y-2">
-          {filterOptions.brands.map((brand) => (
-            <label key={brand} className="flex items-center gap-2 text-sm text-neutral-700">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-neutral-300 text-[#015A52] focus:ring-[#015A52]"
-                checked={selectedBrands.includes(brand)}
-                onChange={() => toggleBrand(brand)}
-              />
-              <span>{brand}</span>
-            </label>
-          ))}
-          {!filterOptions.brands.length && (
-            <p className="text-xs text-neutral-400">Aucune marque disponible.</p>
-          )}
-        </div>
-      </section>
+  // Filtres
+  // const FiltersContent = () => (
+  //   <div className="space-y-8">
+  //     <section>
+  //       <h3 className="text-sm font-semibold text-neutral-900">Genre</h3>
+  //       <div className="mt-3 flex flex-wrap gap-2">
+  //         {filterOptions.categories.map((category) => {
+  //           const isSelected = selectedCategories.includes(category);
+  //           const label = categoryLabels[category] ?? category;
+  //           return (
+  //             <button
+  //               type="button"
+  //               key={category}
+  //               onClick={() => toggleCategory(category)}
+  //               className={`rounded-full border px-3 py-1 text-sm transition ${
+  //                 isSelected
+  //                   ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
+  //                   : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
+  //               }`}
+  //             >
+  //               {label}
+  //             </button>
+  //           );
+  //         })}
+  //         {!filterOptions.categories.length && (
+  //           <p className="text-xs text-neutral-400">Aucun genre disponible.</p>
+  //         )}
+  //       </div>
+  //     </section>
 
-      <section>
-        <h3 className="text-sm font-semibold text-neutral-900">Taille</h3>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {filterOptions.sizes.map((size) => {
-            const isSelected = selectedSizes.includes(size);
-            return (
-              <button
-                type="button"
-                key={size}
-                onClick={() => toggleSize(size)}
-                className={`rounded-full border px-3 py-1 text-sm transition ${
-                  isSelected
-                    ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
-                    : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
-                }`}
-              >
-                {size}
-              </button>
-            );
-          })}
-          {!filterOptions.sizes.length && (
-            <p className="text-xs text-neutral-400">Aucune taille disponible.</p>
-          )}
-        </div>
-      </section>
+  //     <section>
+  //       <h3 className="text-sm font-semibold text-neutral-900">Marque</h3>
+  //       <div className="mt-3 space-y-2">
+  //         {filterOptions.brands.map((brand) => (
+  //           <label key={brand} className="flex items-center gap-2 text-sm text-neutral-700">
+  //             <input
+  //               type="checkbox"
+  //               className="h-4 w-4 rounded border-neutral-300 text-[#015A52] focus:ring-[#015A52]"
+  //               checked={selectedBrands.includes(brand)}
+  //               onChange={() => toggleBrand(brand)}
+  //             />
+  //             <span>{brand}</span>
+  //           </label>
+  //         ))}
+  //         {!filterOptions.brands.length && (
+  //           <p className="text-xs text-neutral-400">Aucune marque disponible.</p>
+  //         )}
+  //       </div>
+  //     </section>
 
-      <section>
-        <h3 className="text-sm font-semibold text-neutral-900">Prix</h3>
-        <div className="mt-3 space-y-3">
-          <div className="flex items-center gap-4">
-            <label className="flex flex-col text-xs text-neutral-500">
-              Min
-              <input
-                type="text"
-                inputMode="decimal"
-                value={priceInputs.min}
-                onChange={handlePriceInputChange(0)}
-                onBlur={handlePriceInputBlur(0)}
-                onKeyDown={handlePriceInputKeyDown(0)}
-                className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
-                placeholder={`${priceBounds.min}`}
-              />
-            </label>
-            <label className="flex flex-col text-xs text-neutral-500">
-              Max
-              <input
-                type="text"
-                inputMode="decimal"
-                value={priceInputs.max}
-                onChange={handlePriceInputChange(1)}
-                onBlur={handlePriceInputBlur(1)}
-                onKeyDown={handlePriceInputKeyDown(1)}
-                className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
-                placeholder={`${priceBounds.max}`}
-              />
-            </label>
-          </div>
-          <p className="text-xs text-neutral-500">
-            Intervalle : {priceBounds.min} EUR - {priceBounds.max} EUR
-          </p>
-        </div>
-      </section>
-    </div>
-  );
+  //     <section>
+  //       <h3 className="text-sm font-semibold text-neutral-900">Taille</h3>
+  //       <div className="mt-3 flex flex-wrap gap-2">
+  //         {filterOptions.sizes.map((size) => {
+  //           const isSelected = selectedSizes.includes(size);
+  //           return (
+  //             <button
+  //               type="button"
+  //               key={size}
+  //               onClick={() => toggleSize(size)}
+  //               className={`rounded-full border px-3 py-1 text-sm transition ${
+  //                 isSelected
+  //                   ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
+  //                   : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
+  //               }`}
+  //             >
+  //               {size}
+  //             </button>
+  //           );
+  //         })}
+  //         {!filterOptions.sizes.length && (
+  //           <p className="text-xs text-neutral-400">Aucune taille disponible.</p>
+  //         )}
+  //       </div>
+  //     </section>
+
+  //     <section>
+  //       <h3 className="text-sm font-semibold text-neutral-900">Prix</h3>
+  //       <div className="mt-3 space-y-3">
+  //         <div className="flex items-center gap-4">
+  //           <label className="flex flex-col text-xs text-neutral-500">
+  //             Min
+  //             <input
+  //               type="text"
+  //               inputMode="decimal"
+  //               value={priceInputs.min}
+  //               onChange={handlePriceInputChange(0)}
+  //               onBlur={handlePriceInputBlur(0)}
+  //               onKeyDown={handlePriceInputKeyDown(0)}
+  //               className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
+  //               placeholder={`${priceBounds.min}`}
+  //             />
+  //           </label>
+  //           <label className="flex flex-col text-xs text-neutral-500">
+  //             Max
+  //             <input
+  //               type="text"
+  //               inputMode="decimal"
+  //               value={priceInputs.max}
+  //               onChange={handlePriceInputChange(1)}
+  //               onBlur={handlePriceInputBlur(1)}
+  //               onKeyDown={handlePriceInputKeyDown(1)}
+  //               className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
+  //               placeholder={`${priceBounds.max}`}
+  //             />
+  //           </label>
+  //         </div>
+  //         <p className="text-xs text-neutral-500">
+  //           Intervalle : {priceBounds.min} EUR - {priceBounds.max} EUR
+  //         </p>
+  //       </div>
+  //     </section>
+  //   </div>
+  // );
+// Fin filtre
 
   return (
     <div className="container py-8">
@@ -441,7 +445,22 @@ export default function ShopPage() {
               </button>
             </div>
             <div className="max-h-[55vh] overflow-y-auto pr-2">
-              <FiltersContent />
+              <FiltersContent
+                filterOptions={filterOptions}
+                selectedBrands={selectedBrands}
+                selectedCategories={selectedCategories}
+                selectedSizes={selectedSizes}
+                toggleBrand={toggleBrand}
+                toggleCategory={toggleCategory}
+                toggleSize={toggleSize}
+                priceInputs={priceInputs}
+                handlePriceInputChange={handlePriceInputChange}
+                handlePriceInputBlur={handlePriceInputBlur}
+                handlePriceInputKeyDown={handlePriceInputKeyDown}
+                hasActiveFilters={hasActiveFilters}
+                resetFilters={resetFilters}
+                filteredCount={filteredProducts.length}
+              />
             </div>
             <button
               type="button"
@@ -454,9 +473,10 @@ export default function ShopPage() {
         </div>
       )}
 
+      {/* Desktop filters */}
       <div className="lg:grid lg:grid-cols-[280px_1fr] lg:gap-10">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-neutral-900">Filtres</h2>
               <button
@@ -468,8 +488,23 @@ export default function ShopPage() {
                 Reinitialiser
               </button>
             </div>
-            <div className="max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-              <FiltersContent />
+            <div className="pr-1">
+              <FiltersContent 
+                filterOptions={filterOptions}
+                selectedBrands={selectedBrands}
+                selectedCategories={selectedCategories}
+                selectedSizes={selectedSizes}
+                toggleBrand={toggleBrand}
+                toggleCategory={toggleCategory}
+                toggleSize={toggleSize}
+                priceInputs={priceInputs}
+                handlePriceInputChange={handlePriceInputChange}
+                handlePriceInputBlur={handlePriceInputBlur}
+                handlePriceInputKeyDown={handlePriceInputKeyDown}
+                hasActiveFilters={hasActiveFilters}
+                resetFilters={resetFilters}
+                filteredCount={filteredProducts.length}
+              />
             </div>
           </div>
         </aside>

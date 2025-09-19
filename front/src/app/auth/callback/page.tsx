@@ -68,7 +68,7 @@ export default function AuthCallbackPage() {
             className="mt-6 rounded bg-[color:var(--color-brand-4)] px-4 py-2 text-sm text-white"
             onClick={() => router.replace("/")}
           >
-            Retour a l'accueil
+            Retour à l'accueil
           </button>
         ) : null}
       </div>

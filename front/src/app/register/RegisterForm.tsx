@@ -100,7 +100,7 @@ export function RegisterForm() {
       <div className="grid gap-6 sm:grid-cols-2">
         <div>
           <label htmlFor="firstName" className="text-sm font-medium text-neutral-700">
-            Prenom
+            Prénom
           </label>
           <input
             id="firstName"
@@ -225,7 +225,7 @@ export function RegisterForm() {
             required
           />
           <span>
-            J'accepte les CGU, la politique de confidentialite et autorise la collecte de mes donnees pour la gestion de mon compte.
+            J'accepte les CGU, la politique de confidentialité et autorise la collecte de mes données pour la gestion de mon compte.
           </span>
         </label>
         {fieldErrors.consent ? (

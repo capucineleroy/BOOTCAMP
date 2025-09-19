@@ -24,8 +24,14 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const co2 = useMemo(() => co2Index(product.id), [product.id]);
 
+  const getSizeText = (count : number) => {
+    if (count === 0) return "Aucune taille disponible";
+    if (count === 1) return "1 taille disponible";
+    return `${count} tailles disponibles`;
+  };
+
   return (
-    <Link href={`/product/${product.id}`} className="group block rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
+    <Link href={`/product/${product.id}`} className="group block rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100 focus:ring-2 focus:ring-offset-1 focus:ring-[#E8E8E8]">
       <div className="relative aspect-square overflow-hidden">
         <div className="absolute left-2 top-2 z-10 text-xs bg-white/90 backdrop-blur rounded px-2 py-1 text-emerald-700 font-medium">
           {co2} g CO₂e
@@ -60,19 +66,13 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.brand} {product.name}
         </h3>
         <p className="text-sm text-neutral-600 line-clamp-2">
-          {product.sizes.length} tailles disponibles
+          {getSizeText(product.sizes.length)} 
         </p>
 
         <div className="mt-1 flex items-center justify-between">
           <span className="text-neutral-600 text-sm">
             {product.price.toFixed(0)} €
           </span>
-
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full bg-[color:var(--color-brand-3)] text-white">
-              Voir le modèle
-            </span>
-          </div>
         </div>
       </div>
     </Link>

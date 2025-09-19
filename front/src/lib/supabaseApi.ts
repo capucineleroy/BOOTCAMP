@@ -18,6 +18,7 @@ function mapProductRow(productRow: any, variants: any[], images: any[]): Product
   return {
     id: productRow.id,
     name: productRow.title,
+    brand: productRow.brand ?? 'Sneaco',
     description: productRow.description ?? '',
     price: representativePrice,
     co2: 0,

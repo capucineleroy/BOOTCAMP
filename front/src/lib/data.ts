@@ -12,12 +12,16 @@ const colors = [
   '#888888',
 ];
 
+const brands = ['Sneaco', 'Adidas', 'Nike', 'Veja', 'New Balance'];
+
 const names = [
   'Aero Runner', 'City Flex', 'Prime Street', 'Nimbus Glide', 'Pulse Core',
   'Urban Drift', 'Trail Edge', 'Wave Rider', 'Vibe Motion', 'Volt Sprint',
 ];
 
-function random<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
+function random<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 function genSizes(productId: string, price: number): ProductVariant[] {
   const base = [38, 39, 40, 41, 42, 43, 44, 45];
@@ -32,15 +36,18 @@ function genSizes(productId: string, price: number): ProductVariant[] {
 
 export const products: Product[] = Array.from({ length: 100 }).map((_, i) => {
   const name = `${random(names)} ${i + 1}`;
+  const brand = random(brands);
   const color = random(colors);
-  const price = 89 + Math.floor(Math.random() * 61); // 89-150€
+  const price = 89 + Math.floor(Math.random() * 61); // 89-150 EUR
   const co2 = parseFloat((3 + Math.random() * 6).toFixed(1)); // 3-9 kg
   const genderPool: Product['gender'][] = ['M', 'F', 'U'];
   const gender = random(genderPool);
   return {
     id: `p-${i + 1}`,
     name,
-    description: 'Minimalist premium sneaker with recycled materials and breathable mesh. Designed for everyday comfort and durability.',
+    brand,
+    description:
+      'Minimalist premium sneaker with recycled materials and breathable mesh. Designed for everyday comfort and durability.',
     price,
     co2,
     color,

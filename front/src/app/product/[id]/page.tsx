@@ -3,6 +3,8 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import ProductCard from "../../../components/ProductCard";
 import { useCart } from "../../../context/CartContext";
+import { useFavorites } from "../../../context/FavoritesContext";
+import { HeartIcon } from "../../../components/icons";
 import { fetchProducts, getProduct as fetchProduct } from "../../../lib/supabaseApi";
 import type { Product, ProductVariant } from "../../../lib/types";
 
@@ -10,6 +12,7 @@ export default function ProductDetail() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const { add } = useCart();
+  const { isFavorite, toggle } = useFavorites();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -17,6 +20,7 @@ export default function ProductDetail() {
   const [size, setSize] = useState<string | undefined>(undefined);
   const [color, setColor] = useState<string | undefined>(undefined);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [variants, setVariants] = useState<ProductVariant[]>([]);
 
   const [mainImageSrc, setMainImageSrc] = useState<string | null>(null);
   // recommandations
@@ -26,19 +30,44 @@ export default function ProductDetail() {
   const mainImageRef = useRef<HTMLDivElement | null>(null);
   const [mainImageHeight, setMainImageHeight] = useState<number | null>(null);
 
-  // Fetch product
+  // Fetch product + ensure variants list from DB
   useEffect(() => {
     let mounted = true;
     fetchProduct(params.id)
-      .then((p) => {
+      .then(async (p) => {
         if (!mounted) return;
-        if (!p) return setProduct(null);
+        if (!p) { setProduct(null); return; }
         setProduct(p);
-
-        // init size + color
-        const firstSize = p.sizes.find((s) => s.stock > 0)?.size ?? p.sizes[0]?.size;
-        setSize(firstSize);
-        setColor(p.colors?.[0] ?? p.color);
+        try {
+          const { supabase } = await import('../../../lib/supabaseClient');
+          const { data: vRows } = await supabase
+            .from('product_variants')
+            .select('*')
+            .eq('product_id', p.id);
+          const mapped: ProductVariant[] = (vRows ?? []).map((v: any) => ({
+            id: v.id,
+            size: String(v.size),
+            color: String(v.color ?? ''),
+            price: Number(v.price ?? 0),
+            stock: Number(v.stock ?? 0),
+          }));
+          if (mounted) setVariants(mapped);
+          const base = mapped.length ? mapped : p.sizes;
+          const first = base.find((s) => s.stock > 0) ?? base[0];
+          if (first) {
+            setSize(String(first.size));
+            setColor(first.color);
+          }
+        } catch {
+          // fallback to embedded sizes
+          const base = p.sizes;
+          setVariants(base);
+          const first = base.find((s) => s.stock > 0) ?? base[0];
+          if (first) {
+            setSize(String(first.size));
+            setColor(first.color ?? p.color);
+          }
+        }
       })
       .catch(() => {})
       .finally(() => {
@@ -72,16 +101,19 @@ export default function ProductDetail() {
       try {
         const { supabase } = await import('../../../lib/supabaseClient');
 
-        // Find variant
-        const { data: variants } = await supabase
-          .from('product_variants')
-          .select('*')
-          .eq('product_id', product.id)
-          .eq('size', String(size))
-          .eq('color', color)
-          .limit(1);
-
-        const variant = variants?.[0] ?? null;
+        // Prefer local variants list to avoid extra network if available
+        const local = variants.find((v) => String(v.size) === String(size) && v.color === color);
+        let variant: any = local ?? null;
+        if (!variant) {
+          const { data: vRows } = await supabase
+            .from('product_variants')
+            .select('*')
+            .eq('product_id', product.id)
+            .eq('size', String(size))
+            .eq('color', color)
+            .limit(1);
+          variant = vRows?.[0] ?? null;
+        }
         setSelectedVariant(variant);
 
         // Fetch first image only: prefer variant image; fallback to product image; else product.images[0]
@@ -120,15 +152,15 @@ export default function ProductDetail() {
     updateVariantAndImages();
   }, [product, size, color]);
 
-  // Build independent color and size options from all variants
+  // Build independent color and size options from all variants (prefer DB variants)
   const colors = (() => {
-    if (!product) return [] as string[];
-    const unique = new Set(product.sizes.map((v) => v.color).filter(Boolean));
+    const source = variants.length ? variants : (product?.sizes ?? []);
+    const unique = new Set(source.map((v) => v.color).filter(Boolean));
     return Array.from(unique);
   })();
   const sizesAll = (() => {
-    if (!product) return [] as string[];
-    const unique = new Set(product.sizes.map((v) => String(v.size)));
+    const source = variants.length ? variants : (product?.sizes ?? []);
+    const unique = new Set(source.map((v) => String(v.size)));
     return Array.from(unique);
   })();
 
@@ -177,17 +209,28 @@ export default function ProductDetail() {
 
         {/* Details (right column) */}
         <div className="flex flex-col gap-4">
-          <h1 className="text-3xl md:text-4xl font-bold leading-tight">{product.brand} {product.name}</h1>
+          <div className="flex items-start justify-between gap-3">
+            <h1 className="text-3xl md:text-4xl font-bold leading-tight flex-1">{product.brand} {product.name}</h1>
+            <button
+              aria-label={isFavorite(product.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
+              title={isFavorite(product.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
+              onClick={() => toggle(product.id)}
+              className="p-2 rounded-full border hover:bg-white text-rose-500"
+            >
+              <HeartIcon filled={isFavorite(product.id)} className="w-5 h-5" />
+            </button>
+          </div>
           <div className="mt-2 text-3xl font-extrabold text-neutral-900">{product.price.toFixed(0)} €</div>
            <div className="w-fit inline-flex text-sm bg-white border rounded px-2 py-1 text-emerald-700">
-             {co2} g CO₂e
+             {co2} g CO₂
           </div>
           {/* Sizes (independent; disable invalid combos for current color) */}
           <div>
             <div className="text-sm font-medium mb-3">Choisissez votre taille</div>
             <div className="flex flex-wrap gap-3">
               {sizesAll.map((sz) => {
-                const combo = product.sizes.find((v) => String(v.size) === String(sz) && v.color === color);
+                const source = variants.length ? variants : (product.sizes ?? []);
+                const combo = source.find((v) => String(v.size) === String(sz) && v.color === color);
                 const disabled = !combo || combo.stock === 0;
                 return (
                   <button
@@ -209,7 +252,8 @@ export default function ProductDetail() {
             <div className="text-sm font-medium mb-2">Couleurs disponibles</div>
             <div className="flex items-center gap-3">
               {(colors.length ? colors : (product.colors ?? [product.color])).map((c) => {
-                const combo = product.sizes.find((v) => String(v.size) === String(size) && v.color === c);
+                const source = variants.length ? variants : (product.sizes ?? []);
+                const combo = source.find((v) => String(v.size) === String(size) && v.color === c);
                 const disabled = !combo || combo.stock === 0;
                 return (
                   <button

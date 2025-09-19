@@ -8,6 +8,7 @@ export interface ProductVariant {
 export interface Product {
   id: string;
   name: string;
+  brand: string;
   description: string;
   price: number; // in EUR
   co2: number; // in kg CO2e

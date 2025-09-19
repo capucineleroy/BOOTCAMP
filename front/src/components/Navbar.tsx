@@ -66,15 +66,15 @@ export default function Navbar() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder="Search sneakers..."
-                className="w-full rounded-full border px-4 py-2 pl-10 text-sm outline-none focus:ring-2 ring-[color:var(--color-brand-2)]"
+                className="w-full rounded-full bg-[#F8F8F8] px-4 py-2 pl-10 text-sm outline-none focus:ring-1 ring-[#E8E8E8]"
               />
               <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
             </div>
           </form>
           <nav className="px-4 pb-4 flex flex-col gap-2 text-sm">
-            <Link href="/shop" onClick={() => setOpen(false)} className="py-2">E-shop</Link>
-            <Link href="/brand" onClick={() => setOpen(false)} className="py-2">Brand</Link>
-            <Link href="/new" onClick={() => setOpen(false)} className="py-2">New Arrivals</Link>
+            <Link href="/shop" onClick={() => setOpen(false)} className="py-2">Catalogue</Link>
+            <Link href="/brand" onClick={() => setOpen(false)} className="py-2">La marque</Link>
+            <Link href="/new" onClick={() => setOpen(false)} className="py-2">Nouveautés</Link>
             {(role === 'seller' || role === 'admin') && <Link href="/dashboard" onClick={() => setOpen(false)} className="py-2">Dashboard</Link>}
             {user ? (
               <button onClick={() => { logout(); setOpen(false); }} className="text-left py-2 text-rose-600">Logout</button>

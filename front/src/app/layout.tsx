@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { Poppins, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import CartDrawer from "../components/CartDrawer";
 import { CartProvider } from "../context/CartContext";
 import { AuthProvider } from "../context/AuthContext";
 import { FavoritesProvider } from "../context/FavoritesContext";
+import LayoutShell from "../components/LayoutShell";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -35,9 +34,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <FavoritesProvider>
-              <Header />
-              <main className="min-h-[70vh]">{children}</main>
-              <Footer />
+              <LayoutShell>{children}</LayoutShell>
               <CartDrawer />
             </FavoritesProvider>
           </CartProvider>

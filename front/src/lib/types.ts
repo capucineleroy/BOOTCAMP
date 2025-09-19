@@ -13,15 +13,13 @@ export interface Product {
   name: string;
   brand: string;
   description: string;
-  // price représentatif (ex: prix min des variants)
-  price: number;
+  price: number; // representative price (eg min variant price)
   co2: number; // in kg CO2e
-  color: string; // couleur par défaut pour affichage
+  color: string; // default display colour
   colors?: string[];
-  gender: 'M' | 'F' | 'U';
-  sizes: ProductVariant[]; // liste de variants simplifiée
+  category: 'Homme' | 'Femme' | 'Unisexe';
+  sizes: ProductVariant[]; // simplified variant list
   images: string[]; // public URLs
-  brand: string;
 }
 
 export interface CartItem {

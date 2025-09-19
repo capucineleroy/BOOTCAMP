@@ -43,6 +43,12 @@ export default function LoginPage() {
       </div>
       <div className="flex w-full items-center justify-center px-6 py-12 shadow-lg sm:px-12 lg:order-first lg:w-1/2 lg:bg-white lg:text-neutral-900 lg:px-16">
         <div className="w-full max-w-md">
+          <Link
+            href="/"
+            className="mb-6 inline-flex items-center text-sm font-semibold text-neutral-600 transition hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          >
+            Retour a l'accueil
+          </Link>
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-neutral-900">Connexion</h1>
             <p className="mt-3 text-sm text-neutral-500">

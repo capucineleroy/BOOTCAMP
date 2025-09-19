@@ -88,15 +88,15 @@ export default function Header() {
 
   return (
     <header className="relative z-40 flex items-center bg-white px-6 py-4 shadow-sm">
-      <Link href="/" className="ml-8 text-lg font-semibold text-neutral-900">
+      <Link href="/" className="ml-8 text-lg font-semibold text-[#014545]">
         Sneco
       </Link>
       <nav className="flex-1 hidden justify-center gap-8 text-sm font-medium text-neutral-700 md:flex">
+        <Link href="/new" className="transition-colors hover:text-[#014545]">
+          Nouveautés
+        </Link>
         <Link href="/shop" className="transition-colors hover:text-[#014545]">
           Catalogue
-        </Link>
-        <Link href="/new" className="transition-colors hover:text-[#014545]">
-          Nos nouveautes
         </Link>
         <Link href="/brand" className="transition-colors hover:text-[#014545]">
           Notre projet

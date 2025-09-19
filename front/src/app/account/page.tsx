@@ -249,19 +249,7 @@ export default function AccountPage() {
             Consultez et mettez a jour vos informations personnelles associees a votre compte Sneco.
           </p>
         </div>
-        <div className="flex flex-col items-stretch gap-2 sm:items-end">
-          <button
-            type="button"
-            onClick={handleDeleteAccount}
-            disabled={deletingAccount || loading}
-            className="inline-flex items-center justify-center rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:border-red-500 hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {deletingAccount ? "Suppression..." : "Supprimer mon compte"}
-          </button>
-          {deleteError ? (
-            <p className="max-w-xs text-xs text-red-600">{deleteError}</p>
-          ) : null}
-        </div>
+        
       </header>
 
       <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
@@ -271,7 +259,7 @@ export default function AccountPage() {
               <h2 className="text-xl font-semibold text-neutral-900">Mon profil</h2>
               <p className="mt-1 text-sm text-neutral-500">Modifiez vos informations personnelles et vos identifiants.</p>
             </div>
-            <span className="inline-flex items-center rounded-full bg-neutral-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+            <span className="inline-flex items-center rounded-full bg-[#015A52] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
               {form.role || user.role}
             </span>
           </div>
@@ -350,9 +338,9 @@ export default function AccountPage() {
               <button
                 type="submit"
                 disabled={loading || saving}
-                className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-neutral-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-full bg-[#015A52] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#02a56d] focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {saving ? "Enregistrement..." : "Enregistrer les modifications"}
+                {saving ? "Enregistrement..." : "Enregistrer"}
               </button>
             </div>
 
@@ -401,11 +389,24 @@ export default function AccountPage() {
             </p>
             <Link
               href="mailto:support@sneco.demo"
-              className="mt-4 inline-flex items-center justify-center rounded-full border border-neutral-900 px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-900 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+              className="mt-4 inline-flex items-center justify-center rounded-full border border-neutral-900 px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-[#02a56d] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
             >
               Contacter le support
             </Link>
           </div>
+          <div className="flex flex-col items-stretch gap-2 sm:items-end">
+          <button
+            type="button"
+            onClick={handleDeleteAccount}
+            disabled={deletingAccount || loading}
+            className="inline-flex items-center justify-center rounded-full border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-700 transition hover:border-red-500 hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {deletingAccount ? "Suppression..." : "Supprimer mon compte"}
+          </button>
+          {deleteError ? (
+            <p className="max-w-xs text-xs text-red-600">{deleteError}</p>
+          ) : null}
+        </div>
         </aside>
       </section>
 

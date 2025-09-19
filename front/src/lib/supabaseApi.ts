@@ -15,6 +15,12 @@ function mapProductRow(productRow: any, variants: any[], images: any[]): Product
     .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
     .map((i) => i.url);
   const representativePrice = sizes.length ? Math.min(...sizes.map((s) => s.price)) : 0;
+  const categoryRaw = String(productRow.category ?? '').trim().toLowerCase();
+  let category: Product['category'] = 'Unisexe';
+  if (categoryRaw.startsWith('hom')) category = 'Homme';
+  else if (categoryRaw.startsWith('fem')) category = 'Femme';
+  else if (categoryRaw.startsWith('uni')) category = 'Unisexe';
+
   return {
     id: productRow.id,
     name: productRow.title,
@@ -24,10 +30,9 @@ function mapProductRow(productRow: any, variants: any[], images: any[]): Product
     co2: 0,
     color: sizes[0]?.color ?? 'unknown',
     colors: Array.from(new Set(variants.map((v) => v.color).filter(Boolean))),
-    gender: 'U',
+    category,
     sizes,
     images: imgs.length ? imgs : ['/adidas.avif'],
-    brand: productRow.brand || 'Generic',
   };
 }
 

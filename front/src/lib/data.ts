@@ -40,8 +40,8 @@ export const products: Product[] = Array.from({ length: 100 }).map((_, i) => {
   const color = random(colors);
   const price = 89 + Math.floor(Math.random() * 61); // 89-150 EUR
   const co2 = parseFloat((3 + Math.random() * 6).toFixed(1)); // 3-9 kg
-  const genderPool: Product['gender'][] = ['M', 'F', 'U'];
-  const gender = random(genderPool);
+  const categoryPool: Product['category'][] = ['Homme', 'Femme', 'Unisexe'];
+  const category = random(categoryPool);
   return {
     id: `p-${i + 1}`,
     name,
@@ -52,10 +52,9 @@ export const products: Product[] = Array.from({ length: 100 }).map((_, i) => {
     co2,
     color,
     colors: [color],
-    gender,
+    category,
     sizes: genSizes(`p-${i + 1}`, price),
     images: [PLACEHOLDER, PLACEHOLDER, PLACEHOLDER],
-    brand: 'Generic',
   } satisfies Product;
 });
 

@@ -12,6 +12,11 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@layer base {
+  html,body { overflow-x: hidden; }
+  *, *::before, *::after { box-sizing: border-box; }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #ffffff;

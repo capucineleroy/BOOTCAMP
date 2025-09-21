@@ -10,6 +10,11 @@ export default function HomeTopCard({ product }: { product: Product }) {
   // image is expected to be product.images[0] (string)
   const image = product.images && product.images[0] ? product.images[0] : '/placeholder.png';
   const bg = (product as any).color ?? 'var(--color-brand-1)';
+  const getSizeText = (count : number) => {
+    if (count === 0) return "Aucune taille disponible";
+    if (count === 1) return "1 taille disponible";
+    return `${count} tailles disponibles`;
+  };
 
   return (
     <Link href={`/product/${product.id}`} className="group block rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
@@ -22,7 +27,7 @@ export default function HomeTopCard({ product }: { product: Product }) {
           onMouseDown={(e) => e.preventDefault()}
           onClickCapture={(e) => e.preventDefault()}
         >
-          <HeartIcon filled={fav} className="w-5 h-5" />
+          <HeartIcon filled={fav} className="w-5 h-5 hover:cursor-pointer" />
         </button>
 
         <div className="w-full h-full" style={{ backgroundColor: bg }}>
@@ -33,7 +38,7 @@ export default function HomeTopCard({ product }: { product: Product }) {
 
       <div className="p-4">
         <h3 className="text-sm font-medium text-neutral-900 line-clamp-1">{product.brand} {product.name}</h3>
-        <p className="text-sm text-neutral-600 line-clamp-2">{product.sizes.length} tailles disponibles</p>
+        <p className="text-sm text-neutral-600 line-clamp-2">{getSizeText(product.sizes.length)}</p>
 
         <div className="mt-1 flex items-center justify-between">
           <h4 className="text-neutral-600 font-bold text-sm">{product.price.toFixed(0)} €</h4>

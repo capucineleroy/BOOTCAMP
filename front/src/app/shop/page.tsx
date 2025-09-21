@@ -11,6 +11,23 @@ export default function ShopPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // initialize filters from query params (e.g. ?gender=male)
+  useEffect(() => {
+    const gender = searchParams.get("gender");
+    if (!gender) return;
+    const mapping: Record<string, Product["category"]> = {
+      male: "Homme",
+      female: "Femme",
+      kids: "Unisexe",
+    };
+    const cat = mapping[gender];
+    if (cat) {
+      // setSelectedCategories will accept array; replace current selection
+      setSelectedCategories([cat]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.get("gender")]);
+
   const rawQuery = searchParams.get("q") ?? "";
   const trimmedQuery = rawQuery.trim();
   const normalizedQuery = trimmedQuery.toLowerCase();
@@ -261,123 +278,6 @@ export default function ShopPage() {
     minPrice !== priceBounds.min ||
     maxPrice !== priceBounds.max;
 
-
-  // Filtres
-  // const FiltersContent = () => (
-  //   <div className="space-y-8">
-  //     <section>
-  //       <h3 className="text-sm font-semibold text-neutral-900">Genre</h3>
-  //       <div className="mt-3 flex flex-wrap gap-2">
-  //         {filterOptions.categories.map((category) => {
-  //           const isSelected = selectedCategories.includes(category);
-  //           const label = categoryLabels[category] ?? category;
-  //           return (
-  //             <button
-  //               type="button"
-  //               key={category}
-  //               onClick={() => toggleCategory(category)}
-  //               className={`rounded-full border px-3 py-1 text-sm transition ${
-  //                 isSelected
-  //                   ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
-  //                   : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
-  //               }`}
-  //             >
-  //               {label}
-  //             </button>
-  //           );
-  //         })}
-  //         {!filterOptions.categories.length && (
-  //           <p className="text-xs text-neutral-400">Aucun genre disponible.</p>
-  //         )}
-  //       </div>
-  //     </section>
-
-  //     <section>
-  //       <h3 className="text-sm font-semibold text-neutral-900">Marque</h3>
-  //       <div className="mt-3 space-y-2">
-  //         {filterOptions.brands.map((brand) => (
-  //           <label key={brand} className="flex items-center gap-2 text-sm text-neutral-700">
-  //             <input
-  //               type="checkbox"
-  //               className="h-4 w-4 rounded border-neutral-300 text-[#015A52] focus:ring-[#015A52]"
-  //               checked={selectedBrands.includes(brand)}
-  //               onChange={() => toggleBrand(brand)}
-  //             />
-  //             <span>{brand}</span>
-  //           </label>
-  //         ))}
-  //         {!filterOptions.brands.length && (
-  //           <p className="text-xs text-neutral-400">Aucune marque disponible.</p>
-  //         )}
-  //       </div>
-  //     </section>
-
-  //     <section>
-  //       <h3 className="text-sm font-semibold text-neutral-900">Taille</h3>
-  //       <div className="mt-3 flex flex-wrap gap-2">
-  //         {filterOptions.sizes.map((size) => {
-  //           const isSelected = selectedSizes.includes(size);
-  //           return (
-  //             <button
-  //               type="button"
-  //               key={size}
-  //               onClick={() => toggleSize(size)}
-  //               className={`rounded-full border px-3 py-1 text-sm transition ${
-  //                 isSelected
-  //                   ? "border-[#015A52] bg-[#015A52]/10 text-[#015A52]"
-  //                   : "border-neutral-200 text-neutral-700 hover:border-neutral-300"
-  //               }`}
-  //             >
-  //               {size}
-  //             </button>
-  //           );
-  //         })}
-  //         {!filterOptions.sizes.length && (
-  //           <p className="text-xs text-neutral-400">Aucune taille disponible.</p>
-  //         )}
-  //       </div>
-  //     </section>
-
-  //     <section>
-  //       <h3 className="text-sm font-semibold text-neutral-900">Prix</h3>
-  //       <div className="mt-3 space-y-3">
-  //         <div className="flex items-center gap-4">
-  //           <label className="flex flex-col text-xs text-neutral-500">
-  //             Min
-  //             <input
-  //               type="text"
-  //               inputMode="decimal"
-  //               value={priceInputs.min}
-  //               onChange={handlePriceInputChange(0)}
-  //               onBlur={handlePriceInputBlur(0)}
-  //               onKeyDown={handlePriceInputKeyDown(0)}
-  //               className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
-  //               placeholder={`${priceBounds.min}`}
-  //             />
-  //           </label>
-  //           <label className="flex flex-col text-xs text-neutral-500">
-  //             Max
-  //             <input
-  //               type="text"
-  //               inputMode="decimal"
-  //               value={priceInputs.max}
-  //               onChange={handlePriceInputChange(1)}
-  //               onBlur={handlePriceInputBlur(1)}
-  //               onKeyDown={handlePriceInputKeyDown(1)}
-  //               className="mt-1 w-28 rounded border border-neutral-200 px-3 py-2 text-sm focus:border-[#015A52] focus:outline-none focus:ring-2 focus:ring-[#015A52]/20"
-  //               placeholder={`${priceBounds.max}`}
-  //             />
-  //           </label>
-  //         </div>
-  //         <p className="text-xs text-neutral-500">
-  //           Intervalle : {priceBounds.min} EUR - {priceBounds.max} EUR
-  //         </p>
-  //       </div>
-  //     </section>
-  //   </div>
-  // );
-// Fin filtre
-
   return (
     <div className="container py-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -524,7 +424,7 @@ export default function ShopPage() {
               disabled={clampedPage <= 1}
               className="px-3 py-1 rounded border border-neutral-300 disabled:bg-[#E8E8E8] cursor-pointer hover:border-neutral-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Precedent
+              Précédent
             </button>
 
             <div className="flex items-center gap-1">

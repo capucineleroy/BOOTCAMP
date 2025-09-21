@@ -17,7 +17,6 @@ function co2Index(seed: string | number): number {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { add } = useCart();
   const { isFavorite, toggle } = useFavorites();
   const fav = isFavorite(product.id);
   const firstAvailableVariant = product.sizes.find((s) => s.stock > 0) ?? product.sizes[0];
@@ -30,11 +29,17 @@ export default function ProductCard({ product }: { product: Product }) {
     return `${count} tailles disponibles`;
   };
 
+  const getColorText = (count: number) => {
+    if (count === 0) return "Aucune couleur";
+    if (count === 1) return "1 couleur";
+    return `${count} couleurs`;
+  };
+
   return (
     <Link href={`/product/${product.id}`} className="group block rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-neutral-100 focus:ring-2 focus:ring-offset-1 focus:ring-[#E8E8E8]">
       <div className="relative aspect-square overflow-hidden">
         <div className="absolute left-2 top-2 z-10 text-xs bg-white/90 backdrop-blur rounded px-2 py-1 text-emerald-700 font-medium">
-          {co2} g CO₂e
+          {co2} g CO₂e 
         </div>
 
         <button
@@ -44,7 +49,7 @@ export default function ProductCard({ product }: { product: Product }) {
           onMouseDown={(e) => e.preventDefault()}
           onClickCapture={(e) => e.preventDefault()}
         >
-          <HeartIcon filled={fav} className="w-5 h-5" />
+          <HeartIcon filled={fav} className="w-5 h-5 hover:cursor-pointer" />
         </button>
 
         {/* image */}
@@ -66,7 +71,10 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.brand} {product.name}
         </h3>
         <p className="text-sm text-neutral-600 line-clamp-2">
-          {getSizeText(product.sizes.length)} 
+          {getSizeText(new Set(product.sizes.map((v) => v.size)).size)}
+        </p>
+        <p className="text-xs text-neutral-500 mt-1">
+          {getColorText(new Set(product.sizes.map((v) => v.color)).size)}
         </p>
 
         <div className="mt-1 flex items-center justify-between">

@@ -41,8 +41,8 @@ export default function FavoritesPage() {
           <p className="text-sm text-neutral-600">Retrouvez ici les paires que vous avez ajoutées.</p>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => clear()} className="text-sm px-3 py-2 rounded border">Tout supprimer</button>
-          <Link href="/shop" className="text-sm px-3 py-2 rounded bg-[color:var(--color-brand-3)] text-white">Continuer vos achats</Link>
+          <button onClick={() => clear()} className="px-3 py-2 text-sm rounded border border-[color:var(--color-brand-3)] border-2 hover:bg-neutral-50">Tout supprimer</button>
+          <Link href="/shop" className="text-sm px-3 py-2 rounded bg-[color:var(--color-brand-3)] border border-[color:var(--color-brand-3)] border-2 text-white">Continuer vos achats</Link>
         </div>
       </div>
 
@@ -64,7 +64,7 @@ export default function FavoritesPage() {
           <Link href="/shop" className="mt-4 inline-block text-sm px-4 py-2 rounded bg-[color:var(--color-brand-3)] text-white">Voir la collection</Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {favs.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

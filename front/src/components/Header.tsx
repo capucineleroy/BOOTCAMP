@@ -9,7 +9,6 @@ import { useCart } from "@/context/CartContext";
 import { HeartIcon, CartIcon, MenuIcon, UserIcon } from "./icons";
 
 const NAV_LINKS = [
-  { href: "/new", label: "Nouveautes" },
   { href: "/shop", label: "Catalogue" },
   { href: "/brand", label: "Notre projet" },
 ];
@@ -160,16 +159,16 @@ export default function Header() {
                 Sneco
               </Link>
               <div className="ml-3 flex items-center gap-4 text-neutral-700">
-                <Link href="/favorites" className="transition-colors hover:text-[#014545]" aria-label="Favoris">
+                <Link href="/favorites" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
                 </Link>
-                <Link href="/account" className="transition-colors hover:text-[#014545]" aria-label="Mon compte">
+                <Link href="/account" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Mon compte">
                   <UserIcon className="h-6 w-6" />
                 </Link>
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="transition-colors hover:text-[#014545]"
+                  className="transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
@@ -206,13 +205,13 @@ export default function Header() {
               </Link>
             ) : (
               <>
-                <Link href="/favorites" className="text-neutral-600 transition-colors hover:text-[#014545]" aria-label="Favoris">
+                <Link href="/favorites" className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
                 </Link>
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="text-neutral-600 transition-colors hover:text-[#014545]"
+                  className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
@@ -222,7 +221,7 @@ export default function Header() {
                     ref={triggerRef}
                     type="button"
                     onClick={toggleDropdown}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#014545] text-sm font-bold text-white transition-colors hover:bg-[#016a6a]"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#014545] text-sm font-bold text-white transition-colors hover:bg-[#016a6a] cursor-pointer"
                     aria-haspopup="menu"
                     aria-expanded={dropdownOpen}
                   >

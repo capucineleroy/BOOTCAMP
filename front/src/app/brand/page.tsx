@@ -46,10 +46,7 @@ export default function BrandPage() {
   durabilité et solidarité pour réinventer l’expérience de la sneaker et construire une mode plus responsable.
           </p>
           <div>
-            <Link
-              href="/shop"
-              className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#014545] transition hover:bg-white/90"
-            >
+            <Link href="/shop" className="px-3 py-2 text-sm text-[color:var(--color-brand-3)] rounded bg-white hover:bg-neutral-50">
               Découvrir nos produits
             </Link>
           </div>
@@ -133,9 +130,7 @@ export default function BrandPage() {
             Explorez nos collections, découvrez notre service de réparation solidaire et participez à une aventure où vos sneakers prennent un sens nouveau. Chez Sneco, votre style peut aussi devenir un geste pour la planète et pour la société.
           </p>
           <Link
-            href="/shop"
-            className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#014545] transition hover:bg-white/90"
-          >
+            href="/shop" className="px-3 py-2 text-sm text-[color:var(--color-brand-3)] rounded bg-white hover:bg-neutral-50">
             Explorer la boutique
           </Link>
         </div>

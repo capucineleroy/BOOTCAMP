@@ -37,7 +37,7 @@ export default function CartDrawer() {
       >
         <div className="flex items-center justify-between border-b border-b-[#E6E6E6] p-4">
           <h2 className="text-lg font-semibold text-[#014545]">Votre panier</h2>
-          <button onClick={close} className="text-sm text-neutral-600 hover:text-neutral-900" aria-label="Fermer le panier">
+          <button onClick={close} className="text-sm text-neutral-600 hover:text-neutral-900 hover:cursor-pointer" aria-label="Fermer le panier">
             Fermer
           </button>
         </div>

@@ -11,6 +11,7 @@ import { HeartIcon, CartIcon, MenuIcon, UserIcon } from "./icons";
 const NAV_LINKS = [
   { href: "/shop", label: "Catalogue" },
   { href: "/brand", label: "Notre projet" },
+  { href: "/repair", label: "Réparation" },
 ];
 
 const CloseIcon = ({ className = "" }: { className?: string }) => (

@@ -191,6 +191,14 @@ export default function OrdersPage() {
                   Aucun article detaille pour cette commande.
                 </p>
               )}
+              <div className="mt-6 flex flex-wrap justify-end gap-3">
+                <Link
+                  href={"/orders/" + order.id + "/repair"}
+                  className="inline-flex items-center justify-center rounded-full bg-[#014545] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#026b6b]"
+                >
+                  Réparer
+                </Link>
+              </div>
             </article>
           );
         })}

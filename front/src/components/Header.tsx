@@ -181,7 +181,7 @@ export default function Header() {
               <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#014545]">
                 Sneco
               </Link>
-              <Link href="/login" className="ml-auto text-sm font-semibold text-[#014545] transition-colors hover:text-[#016a6a]">
+              <Link href="/login" className="ml-auto text-sm font-semibold text-[#015A52] transition-colors hover:text-[#016a6a]">
                 Se connecter
               </Link>
             </>
@@ -189,7 +189,7 @@ export default function Header() {
         </div>
 
         <div className="hidden w-full items-center md:flex">
-          <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#014545]">
+          <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#015A52]">
             Sneco
           </Link>
           <nav className="mx-auto flex items-center gap-8 text-sm font-medium">
@@ -201,7 +201,7 @@ export default function Header() {
           </nav>
           <div className="flex items-center gap-6">
             {!user ? (
-              <Link href="/login" className="text-sm font-semibold text-[#014545] transition-colors hover:text-[#016a6a]">
+              <Link href="/login" className="text-sm font-semibold text-[#015A52] transition-colors hover:text-[#016a6a]">
                 Se connecter
               </Link>
             ) : (
@@ -222,7 +222,7 @@ export default function Header() {
                     ref={triggerRef}
                     type="button"
                     onClick={toggleDropdown}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#014545] text-sm font-bold text-white transition-colors hover:bg-[#016a6a] cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#015A52] text-sm font-bold text-white transition-colors hover:bg-[#016a6a] cursor-pointer"
                     aria-haspopup="menu"
                     aria-expanded={dropdownOpen}
                   >
@@ -252,7 +252,7 @@ export default function Header() {
                         onClick={handleLogout}
                         className="flex w-full items-center px-4 py-2 text-sm text-neutral-700 transition-colors hover:bg-[#014545] hover:text-white"
                       >
-                        Se deconnecter
+                        Se déconnecter
                       </button>
                     </div>
                   ) : null}

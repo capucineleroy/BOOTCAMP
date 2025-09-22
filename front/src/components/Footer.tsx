@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-white">
-      <div className="container grid gap-6 py-8 text-sm text-neutral-800 sm:grid-cols-3">
+      <div className="container grid gap-6 py-8 mt-12 text-sm text-neutral-800 sm:grid-cols-3">
         <div>
-          <h4 className="mb-2 font-semibold text-neutral-950">A propos</h4>
           <p className="leading-relaxed">
+          <h4 className="mb-2 font-semibold text-neutral-950">À propos</h4>
             Nous créons des sneakers minimalistes en Europe, avec un engagement fort pour la durabilité et un design qui traverse le temps.
           </p>
         </div>
@@ -14,18 +14,18 @@ export default function Footer() {
           <h4 className="mb-2 font-semibold text-neutral-950">Suivez nous</h4>
           <ul className="space-y-1">
             <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Instagram
+              <a href="https://github.com/capucineleroy/BOOTCAMP" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
+                Github
               </a>
             </li>
             <li>
               <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Twitter
+                Document de synthèse
               </a>
             </li>
             <li>
               <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Facebook
+                Présentation
               </a>
             </li>
           </ul>

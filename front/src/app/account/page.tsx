@@ -246,7 +246,7 @@ export default function AccountPage() {
           <p className="text-sm uppercase tracking-wide text-neutral-500">Mon espace</p>
           <h1 className="mt-2 text-3xl font-semibold text-neutral-900">Informations du compte</h1>
           <p className="mt-2 max-w-2xl text-sm text-neutral-500">
-            Consultez et mettez a jour vos informations personnelles associees a votre compte Sneco.
+            Consultez et mettez a jour vos informations personnelles associées à votre compte Sneco.
           </p>
         </div>
         
@@ -268,7 +268,7 @@ export default function AccountPage() {
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
                 <label htmlFor="firstName" className="text-sm font-medium text-neutral-700">
-                  Prenom
+                  Prénom
                 </label>
                 <input
                   id="firstName"
@@ -333,7 +333,7 @@ export default function AccountPage() {
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-xs text-neutral-400">
-                Le nouveau mot de passe doit comporter au moins 6 caracteres.
+                Le nouveau mot de passe doit comporter au moins 6 caractères.
               </div>
               <button
                 type="submit"
@@ -360,11 +360,11 @@ export default function AccountPage() {
 
         <aside className="flex flex-col gap-6">
           <div className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
-            <h3 className="text-base font-semibold text-neutral-900">Etat du profil</h3>
+            <h3 className="text-base font-semibold text-neutral-900">État du profil</h3>
             <p className="mt-2 text-sm text-neutral-500">
               {loading
                 ? "Chargement de vos informations..."
-                : "Vos informations personnelles sont stockees de maniere securisee via Supabase."}
+                : "Vos informations personnelles sont stockées de manière sécurisée via Supabase."}
             </p>
             <dl className="mt-6 space-y-3 text-sm text-neutral-600">
               <div className="flex justify-between">
@@ -376,7 +376,7 @@ export default function AccountPage() {
                 <dd className="text-neutral-900">{form.email || "-"}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="font-medium text-neutral-500">Role</dt>
+                <dt className="font-medium text-neutral-500">Rôle</dt>
                 <dd className="text-neutral-900 capitalize">{(form.role || user?.role || "client").toLowerCase()}</dd>
               </div>
             </dl>
@@ -385,7 +385,7 @@ export default function AccountPage() {
           <div className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
             <h3 className="text-base font-semibold text-neutral-900">Support</h3>
             <p className="mt-2 text-sm text-neutral-500">
-              Besoin d'aide pour modifier vos informations ? Contactez notre equipe support pour etre accompagne.
+              Besoin d'aide pour modifier vos informations ? Contactez notre équipe support pour être accompagné.
             </p>
             <Link
               href="mailto:support@sneco.demo"

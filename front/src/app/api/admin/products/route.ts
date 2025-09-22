@@ -21,6 +21,7 @@ const ADMIN_EMAILS = ADMIN_EMAIL_ENV
 
 async function requireAdmin(request: NextRequest): Promise<AdminAuthSuccess | NextResponse> {
   const authHeader = request.headers.get("authorization");
+  console.debug("[requireAdmin] Authorization header:", authHeader);
   if (!authHeader?.startsWith("Bearer ")) {
     return NextResponse.json({ error: "Missing admin bearer token." }, { status: 401 });
   }
@@ -31,6 +32,7 @@ async function requireAdmin(request: NextRequest): Promise<AdminAuthSuccess | Ne
   }
 
   const { data, error } = await supabaseAdmin.auth.getUser(accessToken);
+  console.debug("[requireAdmin] supabase.getUser result:", { data, error });
   if (error || !data?.user) {
     return NextResponse.json({ error: "Unable to authenticate admin." }, { status: 401 });
   }

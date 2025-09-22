@@ -11,7 +11,7 @@ const maxFileSize = 10 * 1024 * 1024; // 10 Mo
 
 const photoFields = [
   { id: "leftFront", label: "Avant des chaussures" },
-  { id: "leftBack", label: "Arriere des chaussures" },
+  { id: "leftBack", label: "Arrière des chaussures" },
   { id: "leftSide", label: "Côté droit chaussure gauche" },
   { id: "rightFront", label: "Côté gauche chaussure gauche" },
   { id: "rightBack", label: "Côté droit chaussure droite" },

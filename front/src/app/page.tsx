@@ -54,7 +54,6 @@ export default async function Home() {
             <h1 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight">Notre collection &eacute;t&eacute; 2025</h1>
             <p className="mt-4 text-neutral-600">Sneakers neuves, expertise restauration. Confiance garantie.</p>
             <div className="mt-6 flex items-center gap-3">
-              <Link href="/shop" className="px-5 py-3 rounded-lg bg-[#015A52] text-white hover:opacity-95">Découvrir</Link>
               <Link href="/shop" className="px-5 py-3 rounded-lg border border-[#015A52] border-2 bg-[#015A52] text-white hover:opacity-95">D&eacute;couvrir</Link>
               <Link href="/new" className="px-5 py-3 rounded-lg border border-[#015A52] border-2 hover:bg-neutral-50">Nouveaut&eacute;s</Link>
             </div>

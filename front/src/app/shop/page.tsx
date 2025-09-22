@@ -294,9 +294,10 @@ export default function ShopPage() {
             </button>
           </div>
           {trimmedQuery && (
-            <p className="pt-4 text-sm text-neutral-600">Resultats pour "{trimmedQuery}"</p>
+            <p className="pt-4 text-sm text-neutral-600">Résultats pour "{trimmedQuery}"</p>
           )}
         </div>
+
         <div className="flex flex-col items-end gap-3 sm:flex-row sm:items-center">
           <form onSubmit={submitSearch} className="hidden w-[360px] max-w-full items-center gap-2 sm:flex">
             <div className="relative flex-1">
@@ -341,7 +342,7 @@ export default function ShopPage() {
                 className="text-sm font-medium text-[#015A52] disabled:opacity-40"
                 disabled={!hasActiveFilters}
               >
-                Reinitialiser
+                Réinitialiser
               </button>
             </div>
             <div className="max-h-[55vh] overflow-y-auto pr-2">
@@ -367,7 +368,7 @@ export default function ShopPage() {
               onClick={() => setIsMobileFiltersOpen(false)}
               className="mt-6 w-full rounded-lg bg-[#015A52] py-3 text-sm font-semibold text-white"
             >
-              Voir les resultats
+              Voir les résultats
             </button>
           </div>
         </div>
@@ -385,7 +386,7 @@ export default function ShopPage() {
                 className="text-sm font-medium text-[#015A52] disabled:opacity-40"
                 disabled={!hasActiveFilters}
               >
-                Reinitialiser
+                Réinitialiser
               </button>
             </div>
             <div className="pr-1">

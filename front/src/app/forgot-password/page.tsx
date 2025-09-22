@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-[#018D5B] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-[var(--color-brand-3)] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Envoi en cours..." : "Envoyer le lien"}
             </button>

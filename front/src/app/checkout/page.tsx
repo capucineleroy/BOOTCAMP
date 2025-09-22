@@ -140,7 +140,7 @@ export default function CheckoutPage() {
     <div className="bg-neutral-50">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-semibold text-neutral-900">Finaliser votre commande</h1>
-        <p className="mt-2 text-sm text-neutral-600">Renseignez vos coordonnees pour acceder au paiement securise.</p>
+        <p className="mt-2 text-sm text-neutral-600">Renseignez vos coordonnées pour accéder au paiement securisé.</p>
 
         <form onSubmit={handleSubmit} className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <div className="space-y-8">
@@ -150,7 +150,7 @@ export default function CheckoutPage() {
 
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col">
-                  <label htmlFor="firstName" className="text-sm font-medium text-neutral-700">Prenom</label>
+                  <label htmlFor="firstName" className="text-sm font-medium text-neutral-700">Prénom*</label>
                   <input
                     id="firstName"
                     name="firstName"
@@ -161,7 +161,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="lastName" className="text-sm font-medium text-neutral-700">Nom</label>
+                  <label htmlFor="lastName" className="text-sm font-medium text-neutral-700">Nom*</label>
                   <input
                     id="lastName"
                     name="lastName"
@@ -172,7 +172,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="email" className="text-sm font-medium text-neutral-700">Email</label>
+                  <label htmlFor="email" className="text-sm font-medium text-neutral-700">Email*</label>
                   <input
                     id="email"
                     name="email"
@@ -184,7 +184,7 @@ export default function CheckoutPage() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="phone" className="text-sm font-medium text-neutral-700">Telephone</label>
+                  <label htmlFor="phone" className="text-sm font-medium text-neutral-700">Téléphone*</label>
                   <input
                     id="phone"
                     name="phone"

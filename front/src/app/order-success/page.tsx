@@ -154,7 +154,7 @@ export default async function OrderSuccessPage({ searchParams }: { searchParams:
     <div className="bg-neutral-50">
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#014545]">Merci !</p>
+          <p className="text-m font-semibold uppercase tracking-[0.10em] text-[#014545]">Merci !</p>
           <h1 className="mt-4 text-3xl font-semibold text-neutral-900 sm:text-4xl">Commande confirmée</h1>
           <p className="mt-4 text-sm text-neutral-600">
             Un e-mail de confirmation a été envoyé à {session.customer_details?.email ?? "votre adresse"}.

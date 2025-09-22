@@ -5,10 +5,8 @@ export default function Footer() {
     <footer className="bg-white">
       <div className="container grid gap-6 py-8 mt-12 text-sm text-neutral-800 sm:grid-cols-3">
         <div>
-          <p className="leading-relaxed">
           <h4 className="mb-2 font-semibold text-neutral-950">À propos</h4>
             Nous créons des sneakers minimalistes en Europe, avec un engagement fort pour la durabilité et un design qui traverse le temps.
-          </p>
         </div>
         <div>
           <h4 className="mb-2 font-semibold text-neutral-950">Suivez nous</h4>

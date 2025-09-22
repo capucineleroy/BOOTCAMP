@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import AddressAutocomplete from "@/components/AddressAutocomplete";
 
 type CustomerInfo = {
   firstName: string;
@@ -200,17 +201,22 @@ export default function CheckoutPage() {
 
             <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
               <h2 className="text-xl font-semibold text-neutral-900">Adresse de livraison</h2>
-              <p className="mt-1 text-sm text-neutral-500">Nous exp?dions en Europe et en Amerique du Nord.</p>
+              <p className="mt-1 text-sm text-neutral-500">Nous expédions en Europe et en Amerique du Nord.</p>
 
               <div className="mt-6 space-y-4">
                 <div className="flex flex-col">
                   <label htmlFor="addressLine1" className="text-sm font-medium text-neutral-700">Adresse</label>
-                  <input
-                    id="addressLine1"
-                    name="addressLine1"
+                  <AddressAutocomplete
                     value={shipping.addressLine1}
-                    onChange={(event) => setShipping((prev) => ({ ...prev, addressLine1: event.target.value }))}
-                    className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                    onChange={(value) => setShipping((prev) => ({ ...prev, addressLine1: value }))}
+                    onSelect={(address) => setShipping((prev) => ({
+                      ...prev,
+                      addressLine1: address.addressLine1,
+                      city: address.city || prev.city,
+                      postalCode: address.postalCode || prev.postalCode,
+                      country: address.country || prev.country
+                    }))}
+                    placeholder="Tapez votre adresse..."
                     required
                   />
                 </div>
@@ -320,7 +326,7 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-[#014545] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#026b6b] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-[#014545] px-6 py-3 text-sm font-semibold text-white transition hover:border-neutral-400 hover:cursor-pointer hover:bg-[#026b6b] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Redirection vers Stripe..." : "Payer avec Stripe"}
             </button>
@@ -328,7 +334,7 @@ export default function CheckoutPage() {
             <button
               type="button"
               onClick={() => router.push("/shop")}
-              className="w-full rounded-full border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+              className="w-full rounded-lg border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:cursor-pointer hover:text-neutral-900"
             >
               Continuer mes achats
             </button>

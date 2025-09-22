@@ -4,29 +4,14 @@ import { fetchProducts } from "../../lib/supabaseApi";
 import { FilterIcon, SearchIcon } from "../../components/icons";
 import { ChangeEvent, FocusEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import type { Product } from "../../lib/types";
+import { useAuth } from "../../context/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import FiltersContent from "../../components/FiltersContent";
 
 export default function ShopPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // initialize filters from query params (e.g. ?gender=male)
-  useEffect(() => {
-    const gender = searchParams.get("gender");
-    if (!gender) return;
-    const mapping: Record<string, Product["category"]> = {
-      male: "Homme",
-      female: "Femme",
-      kids: "Unisexe",
-    };
-    const cat = mapping[gender];
-    if (cat) {
-      // setSelectedCategories will accept array; replace current selection
-      setSelectedCategories([cat]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.get("gender")]);
+  const { role } = useAuth() as any;
 
   const rawQuery = searchParams.get("q") ?? "";
   const trimmedQuery = rawQuery.trim();
@@ -64,10 +49,10 @@ export default function ShopPage() {
     const sizeSet = new Set<string>();
     const prices: number[] = [];
 
-    productsState.forEach((product) => {
+    productsState.forEach((product: Product) => {
       if (product.brand) brandSet.add(product.brand);
       categorySet.add(product.category);
-      product.sizes.forEach((variant) => sizeSet.add(variant.size));
+      product.sizes.forEach((variant: any) => sizeSet.add(variant.size));
       prices.push(product.price);
     });
 
@@ -122,12 +107,12 @@ export default function ShopPage() {
   useEffect(() => {
     setPriceInputs({ min: String(priceRange[0]), max: String(priceRange[1]) });
   }, [priceRange]);
-  
+
   const minPrice = priceInitialized ? priceRange[0] : priceBounds.min;
   const maxPrice = priceInitialized ? priceRange[1] : priceBounds.max;
 
   const filteredProducts = useMemo(() => {
-    return productsState.filter((product) => {
+    return productsState.filter((product: Product) => {
       const brand = product.brand ?? "Sneaco";
       if (normalizedQuery && !product.name.toLowerCase().includes(normalizedQuery)) {
         return false;
@@ -140,7 +125,7 @@ export default function ShopPage() {
       }
       if (
         selectedSizes.length &&
-        !product.sizes.some((variant) => selectedSizes.includes(variant.size))
+        !product.sizes.some((variant: any) => selectedSizes.includes(variant.size))
       ) {
         return false;
       }
@@ -190,28 +175,28 @@ export default function ShopPage() {
   };
 
   const toggleBrand = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((item) => item !== brand) : [...prev, brand]
+    setSelectedBrands((prev: string[]) =>
+      prev.includes(brand) ? prev.filter((item: string) => item !== brand) : [...prev, brand]
     );
   };
 
   const toggleCategory = (category: Product["category"]) => {
-    setSelectedCategories((prev) =>
+    setSelectedCategories((prev: Product["category"][]) =>
       prev.includes(category)
-        ? prev.filter((item) => item !== category)
+        ? prev.filter((item: Product["category"]) => item !== category)
         : [...prev, category]
     );
   };
 
   const toggleSize = (size: string) => {
-    setSelectedSizes((prev) =>
-      prev.includes(size) ? prev.filter((item) => item !== size) : [...prev, size]
+    setSelectedSizes((prev: string[]) =>
+      prev.includes(size) ? prev.filter((item: string) => item !== size) : [...prev, size]
     );
   };
 
   const handlePriceInputChange = (index: 0 | 1) => (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setPriceInputs((prev) => ({
+    setPriceInputs((prev: { min: string; max: string }) => ({
       ...prev,
       [index === 0 ? "min" : "max"]: value,
     }));
@@ -220,7 +205,7 @@ export default function ShopPage() {
   const applyPriceInput = (index: 0 | 1, rawValue: string) => {
     const trimmed = rawValue.trim();
     if (trimmed === "") {
-      setPriceInputs((prev) => ({
+      setPriceInputs((prev: { min: string; max: string }) => ({
         ...prev,
         [index === 0 ? "min" : "max"]: String(index === 0 ? minPrice : maxPrice),
       }));
@@ -229,14 +214,14 @@ export default function ShopPage() {
 
     const numeric = Number(trimmed.replace(',', '.'));
     if (!Number.isFinite(numeric)) {
-      setPriceInputs((prev) => ({
+      setPriceInputs((prev: { min: string; max: string }) => ({
         ...prev,
         [index === 0 ? "min" : "max"]: String(index === 0 ? minPrice : maxPrice),
       }));
       return;
     }
 
-    setPriceRange((prev) => {
+    setPriceRange((prev: [number, number]) => {
       const { min, max } = priceBounds;
       const [prevMin, prevMax] = prev;
       let nextMin = prevMin;
@@ -310,7 +295,18 @@ export default function ShopPage() {
               <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
             </div>
           </form>
-          <div className="text-sm text-neutral-600">{filteredProducts.length} produits</div>
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-neutral-600">{filteredProducts.length} produits</div>
+            {role === 'admin' && (
+              <button
+                type="button"
+                onClick={() => router.push('/admin/products')}
+                className="rounded-lg bg-[#015A52] px-4 py-2 text-sm font-semibold text-white transition-colors hover:cursor-pointer hover:bg-[#016a6a]"
+              >
+                Ajouter un produit
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -390,7 +386,7 @@ export default function ShopPage() {
               </button>
             </div>
             <div className="pr-1">
-              <FiltersContent 
+              <FiltersContent
                 filterOptions={filterOptions}
                 selectedBrands={selectedBrands}
                 selectedCategories={selectedCategories}
@@ -412,7 +408,7 @@ export default function ShopPage() {
 
         <div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-            {paginated.map((product) => (
+            {paginated.map((product: Product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -430,7 +426,7 @@ export default function ShopPage() {
 
             <div className="flex items-center gap-1">
               {totalPages <= 7
-                ? Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                ? Array.from({ length: totalPages }, (_, i) => i + 1).map((p: number) => (
                     <button
                       type="button"
                       key={p}
@@ -465,7 +461,7 @@ export default function ShopPage() {
                             {start > 2 && <span className="px-2">...</span>}
                           </>
                         )}
-                        {pages.map((p) => (
+                        {pages.map((p: number) => (
                           <button
                             type="button"
                             key={p}

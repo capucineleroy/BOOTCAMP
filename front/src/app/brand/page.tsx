@@ -125,7 +125,7 @@ export default function BrandPage() {
 
       <section className="bg-[#014545] py-16">
         <div className="mx-auto max-w-4xl space-y-6 px-6 text-center text-white sm:px-10">
-          <h2 className="text-3xl font-semibold sm:text-4xl">Pret à rejoindre l'aventure Sneco ?</h2>
+          <h2 className="text-3xl font-semibold sm:text-4xl">Prêt à rejoindre l'aventure Sneco ?</h2>
           <p className="text-base leading-relaxed text-white/80 sm:text-lg">
             Explorez nos collections, découvrez notre service de réparation solidaire et participez à une aventure où vos sneakers prennent un sens nouveau. Chez Sneco, votre style peut aussi devenir un geste pour la planète et pour la société.
           </p>

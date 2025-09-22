@@ -155,13 +155,13 @@ export default async function OrderSuccessPage({ searchParams }: { searchParams:
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#014545]">Merci !</p>
-          <h1 className="mt-4 text-3xl font-semibold text-neutral-900 sm:text-4xl">Commande confirmee</h1>
+          <h1 className="mt-4 text-3xl font-semibold text-neutral-900 sm:text-4xl">Commande confirmée</h1>
           <p className="mt-4 text-sm text-neutral-600">
-            Un e-mail de confirmation à été envoyé à {session.customer_details?.email ?? "votre adresse"}.
+            Un e-mail de confirmation a été envoyé à {session.customer_details?.email ?? "votre adresse"}.
           </p>
 
           <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-5 text-sm text-neutral-700">
-            <p className="font-semibold text-neutral-900">Numero de commande</p>
+            <p className="font-semibold text-neutral-900">Numéro de commande</p>
             <p className="mt-1 text-base font-mono">{displayOrderId}</p>
             <p className="mt-4 text-neutral-600">
               Montant réglé : <span className="font-semibold text-neutral-900">{amountPaid.toFixed(2)} EUR</span>
@@ -171,13 +171,12 @@ export default async function OrderSuccessPage({ searchParams }: { searchParams:
           <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/orders"
-              className="inline-flex items-center justify-center rounded-full bg-[#014545] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#026b6b]"
-            >
+              className="px-5 py-3 rounded-lg border border-[#015A52] border-2 bg-[#015A52] text-white hover:opacity-95">
               Historique d'achat
             </Link>
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center rounded-full border border-neutral-200 px-6 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+              className="px-5 py-3 rounded-lg border border-[#015A52] border-2 hover:bg-neutral-50"
             >
               Continuer mes achats
             </Link>

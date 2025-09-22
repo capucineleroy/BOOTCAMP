@@ -289,7 +289,7 @@ export default function ShopPage() {
               <input
                 value={searchValue}
                 onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search sneakers..."
+                placeholder="Recherchez une sneakers..."
                 className="w-full rounded-full bg-[#F8F8F8] px-4 py-2 pl-10 text-sm outline-none focus:ring-1 ring-[#E8E8E8]"
               />
               <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />

@@ -80,13 +80,13 @@ export default function RepairPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/orders"
-                className="inline-flex items-center justify-center rounded-full bg-[#014545] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#014545]/40 transition hover:bg-[#026b6b]"
+                className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#015A52] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#014545]/40 transition hover:bg-[#026b6b]"
               >
                 Démarrer une reparation
               </Link>
               <Link
                 href="/shop"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 shadow-lg transition hover:bg-neutral-100"
+                className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-[#015A52] shadow-lg transition hover:bg-neutral-100"
               >
                 Explorer la boutique
               </Link>
@@ -107,7 +107,7 @@ export default function RepairPage() {
                 key={step.title}
                 className="flex flex-col gap-4 rounded-2xl bg-white p-6 shadow-lg md:flex-row md:items-center"
               >
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#014545] text-lg font-semibold text-white">
+                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#015A52] text-lg font-semibold text-white">
                   {index + 1}
                 </div>
                 <div className="md:pl-4">
@@ -133,7 +133,7 @@ export default function RepairPage() {
               </ul>
               <Link
                 href="/product/repair-kit"
-                className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#014545]"
+                className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-[#015A52] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#014545]"
               >
                 Acheter
               </Link>
@@ -173,7 +173,7 @@ export default function RepairPage() {
             </div>
             <Link
               href="/orders"
-              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#014545] transition hover:bg-neutral-100"
+              className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-[#014545] transition hover:bg-neutral-100"
             >
                Commandes
             </Link>

@@ -6,6 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { HeartIcon, CartIcon, MenuIcon, UserIcon } from "./icons";
 
 const NAV_LINKS = [
@@ -28,7 +29,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { open: openCartDrawer } = useCart();
+  const { open: openCartDrawer, count } = useCart();
+  const { ids: favIds } = useFavorites();
 
   useEffect(() => {
     let cancelled = false;
@@ -160,8 +162,11 @@ export default function Header() {
                 Sneco
               </Link>
               <div className="ml-3 flex items-center gap-4 text-neutral-700">
-                <Link href="/favorites" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                <Link href="/favorites" className="relative transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
+                  {favIds.length > 0 && (
+                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                  )}
                 </Link>
                 <Link href="/account" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Mon compte">
                   <UserIcon className="h-6 w-6" />
@@ -169,10 +174,13 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="transition-colors hover:text-[#014545] cursor-pointer"
+                  className="relative transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                  )}
                 </button>
               </div>
             </>
@@ -181,7 +189,7 @@ export default function Header() {
               <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#014545]">
                 Sneco
               </Link>
-              <Link href="/login" className="ml-auto text-sm font-semibold text-[#014545] transition-colors hover:text-[#016a6a]">
+              <Link href="/login" className="ml-auto text-sm font-semibold text-[#015A52] transition-colors hover:text-[#016a6a]">
                 Se connecter
               </Link>
             </>
@@ -189,7 +197,7 @@ export default function Header() {
         </div>
 
         <div className="hidden w-full items-center md:flex">
-          <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#014545]">
+          <Link href="/" className="text-lg font-semibold uppercase tracking-wide text-[#015A52]">
             Sneco
           </Link>
           <nav className="mx-auto flex items-center gap-8 text-sm font-medium">
@@ -201,28 +209,34 @@ export default function Header() {
           </nav>
           <div className="flex items-center gap-6">
             {!user ? (
-              <Link href="/login" className="text-sm font-semibold text-[#014545] transition-colors hover:text-[#016a6a]">
+              <Link href="/login" className="text-sm font-semibold text-[#015A52] transition-colors hover:text-[#016a6a]">
                 Se connecter
               </Link>
             ) : (
               <>
-                <Link href="/favorites" className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                <Link href="/favorites" className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
+                  {favIds.length > 0 && (
+                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                  )}
                 </Link>
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
+                  className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
+                  {count > 0 && (
+                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                  )}
                 </button>
                 <div className="relative">
                   <button
                     ref={triggerRef}
                     type="button"
                     onClick={toggleDropdown}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#014545] text-sm font-bold text-white transition-colors hover:bg-[#016a6a] cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#015A52] text-sm font-bold text-white transition-colors hover:bg-[#016a6a] cursor-pointer"
                     aria-haspopup="menu"
                     aria-expanded={dropdownOpen}
                   >
@@ -252,7 +266,7 @@ export default function Header() {
                         onClick={handleLogout}
                         className="flex w-full items-center px-4 py-2 text-sm text-neutral-700 transition-colors hover:bg-[#014545] hover:text-white"
                       >
-                        Se deconnecter
+                        Se déconnecter
                       </button>
                     </div>
                   ) : null}

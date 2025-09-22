@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { CartIcon, MenuIcon, SearchIcon, UserIcon, HeartIcon } from './icons';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { count, toggle } = useCart();
+  const { ids: favIds } = useFavorites();
   const { user, role, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
@@ -42,8 +44,13 @@ export default function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/favorites" className="p-2 text-neutral-700 hover:text-black" aria-label="Favorites">
+          <Link href="/favorites" className="relative p-2 text-neutral-700 hover:text-black" aria-label="Favorites">
             <HeartIcon className="w-6 h-6" />
+            {favIds.length > 0 && (
+            <span className="absolute -top-1.5 -right-1.5 min-w-[10px] h-[10px] flex items-center justify-center rounded-full bg-rose-600 text-white text-[5px] font-medium">
+              {favIds.length}
+            </span>
+          )}
           </Link>
           <Link href={user ? '/account' : '/login'} className="p-2 text-neutral-700 hover:text-black" aria-label="Account">
             <UserIcon className="w-6 h-6" />
@@ -51,8 +58,10 @@ export default function Navbar() {
           <button onClick={toggle} className="relative p-2 text-neutral-700 hover:text-black" aria-label="Cart">
             <CartIcon className="w-6 h-6" />
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
-            )}
+            <span className="absolute -top-2 -right-2 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[color:var(--color-brand-2)] text-white text-[10px] font-medium shadow-md">
+              {count}
+            </span>            
+        )}
           </button>
         </div>
       </div>

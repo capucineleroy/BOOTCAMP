@@ -1,10 +1,11 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import { HeartIcon, CartIcon, MenuIcon, UserIcon } from "./icons";
@@ -31,6 +32,7 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { open: openCartDrawer, count } = useCart();
   const { ids: favIds } = useFavorites();
+  const { role } = useAuth() as any;
 
   useEffect(() => {
     let cancelled = false;
@@ -162,26 +164,30 @@ export default function Header() {
                 Sneco
               </Link>
               <div className="ml-3 flex items-center gap-4 text-neutral-700">
-                <Link href="/favorites" className="relative transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
-                  <HeartIcon className="h-6 w-6" />
-                  {favIds.length > 0 && (
-                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
-                  )}
-                </Link>
+                {role !== 'admin' && (
+                  <Link href="/favorites" className="relative transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                    <HeartIcon className="h-6 w-6" />
+                    {favIds.length > 0 && (
+                      <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                    )}
+                  </Link>
+                )}
                 <Link href="/account" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Mon compte">
                   <UserIcon className="h-6 w-6" />
                 </Link>
-                <button
-                  type="button"
-                  onClick={openCartDrawer}
-                  className="relative transition-colors hover:text-[#014545] cursor-pointer"
-                  aria-label="Panier"
-                >
-                  <CartIcon className="h-6 w-6" />
-                  {count > 0 && (
-                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
-                  )}
-                </button>
+                {role !== 'admin' && (
+                  <button
+                    type="button"
+                    onClick={openCartDrawer}
+                    className="relative transition-colors hover:text-[#014545] cursor-pointer"
+                    aria-label="Panier"
+                  >
+                    <CartIcon className="h-6 w-6" />
+                    {count > 0 && (
+                      <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                    )}
+                  </button>
+                )}
               </div>
             </>
           ) : (
@@ -201,11 +207,24 @@ export default function Header() {
             Sneco
           </Link>
           <nav className="mx-auto flex items-center gap-8 text-sm font-medium">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className={getNavLinkClass(link.href)}>
-                {link.label}
+            <Link href="/shop" className={getNavLinkClass("/shop")}>
+              Catalogue
+            </Link>
+            {role === 'admin' && (
+              <Link href="/dashboard" className={getNavLinkClass("/dashboard")}>
+                Dashboard
               </Link>
-            ))}
+            )}
+            {role !== 'admin' && (
+              <>
+                <Link href="/brand" className={getNavLinkClass("/brand")}>
+                  Notre projet
+                </Link>
+                <Link href="/repair" className={getNavLinkClass("/repair")}>
+                  Réparation
+                </Link>
+              </>
+            )}
           </nav>
           <div className="flex items-center gap-6">
             {!user ? (
@@ -214,23 +233,27 @@ export default function Header() {
               </Link>
             ) : (
               <>
-                <Link href="/favorites" className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
-                  <HeartIcon className="h-6 w-6" />
-                  {favIds.length > 0 && (
-                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
-                  )}
-                </Link>
-                <button
-                  type="button"
-                  onClick={openCartDrawer}
-                  className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
-                  aria-label="Panier"
-                >
-                  <CartIcon className="h-6 w-6" />
-                  {count > 0 && (
-                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
-                  )}
-                </button>
+                {role !== 'admin' && (
+                  <Link href="/favorites" className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                    <HeartIcon className="h-6 w-6" />
+                    {favIds.length > 0 && (
+                      <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                    )}
+                  </Link>
+                )}
+                {role !== 'admin' && (
+                  <button
+                    type="button"
+                    onClick={openCartDrawer}
+                    className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
+                    aria-label="Panier"
+                  >
+                    <CartIcon className="h-6 w-6" />
+                    {count > 0 && (
+                      <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                    )}
+                  </button>
+                )}
                 <div className="relative">
                   <button
                     ref={triggerRef}
@@ -294,11 +317,24 @@ export default function Header() {
                 </button>
               </div>
               <nav className="mt-6 flex flex-col gap-4 text-base font-medium text-neutral-800">
-                {NAV_LINKS.map((link) => (
-                  <Link key={link.href} href={link.href} onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">
-                    {link.label}
+                <Link href="/shop" onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">
+                  Catalogue
+                </Link>
+                {role === 'admin' && (
+                  <Link href="/dashboard" onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">
+                    Dashboard
                   </Link>
-                ))}
+                )}
+                {role !== 'admin' && (
+                  <>
+                    <Link href="/brand" onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">
+                      Notre projet
+                    </Link>
+                    <Link href="/repair" onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">
+                      Réparation
+                    </Link>
+                  </>
+                )}
               </nav>
               <div className="mt-8 flex flex-col gap-3 border-t border-neutral-200 pt-6 text-sm font-medium text-neutral-700">
                 <Link href="/orders" onClick={closeMobileMenu} className="rounded-full px-2 py-2 transition-colors hover:bg-[#014545]/10">

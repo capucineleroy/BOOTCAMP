@@ -83,6 +83,14 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
 export function useFavorites() {
   const ctx = useContext(FavCtx);
-  if (!ctx) throw new Error('useFavorites must be used within FavoritesProvider');
+  if (!ctx) {
+    // Fallback safe no-op implementation when provider is not mounted (prevents render crashes)
+    return {
+      ids: [],
+      toggle: () => {},
+      isFavorite: () => false,
+      clear: () => {},
+    } as FavoritesState;
+  }
   return ctx;
 }

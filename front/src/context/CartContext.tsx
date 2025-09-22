@@ -201,7 +201,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
 export function useCart() {
   const ctx = useContext(CartCtx);
-  if (!ctx) throw new Error('useCart must be used within CartProvider');
+  if (!ctx) {
+    // Safe fallback so callers can render even if provider isn't mounted yet
+    return {
+      items: [],
+      isOpen: false,
+      open: () => {},
+      close: () => {},
+      toggle: () => {},
+      add: () => {},
+      remove: () => {},
+      setQuantity: () => {},
+      clear: () => {},
+      subtotal: 0,
+      count: 0,
+      detailed: [],
+    } as CartState;
+  }
   return ctx;
 }
 

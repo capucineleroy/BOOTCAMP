@@ -6,6 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabaseClient";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { HeartIcon, CartIcon, MenuIcon, UserIcon } from "./icons";
 
 const NAV_LINKS = [
@@ -27,7 +28,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const { open: openCartDrawer } = useCart();
+  const { open: openCartDrawer, count } = useCart();
+  const { ids: favIds } = useFavorites();
 
   useEffect(() => {
     let cancelled = false;
@@ -159,8 +161,11 @@ export default function Header() {
                 Sneco
               </Link>
               <div className="ml-3 flex items-center gap-4 text-neutral-700">
-                <Link href="/favorites" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                <Link href="/favorites" className="relative transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
+                  {favIds.length > 0 && (
+                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                  )}
                 </Link>
                 <Link href="/account" className="transition-colors hover:text-[#014545] cursor-pointer" aria-label="Mon compte">
                   <UserIcon className="h-6 w-6" />
@@ -168,10 +173,13 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="transition-colors hover:text-[#014545] cursor-pointer"
+                  className="relative transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                  )}
                 </button>
               </div>
             </>
@@ -205,16 +213,22 @@ export default function Header() {
               </Link>
             ) : (
               <>
-                <Link href="/favorites" className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
+                <Link href="/favorites" className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer" aria-label="Favoris">
                   <HeartIcon className="h-6 w-6" />
+                  {favIds.length > 0 && (
+                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-rose-600 text-white">{favIds.length}</span>
+                  )}
                 </Link>
                 <button
                   type="button"
                   onClick={openCartDrawer}
-                  className="text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
+                  className="relative text-neutral-600 transition-colors hover:text-[#014545] cursor-pointer"
                   aria-label="Panier"
                 >
                   <CartIcon className="h-6 w-6" />
+                  {count > 0 && (
+                    <span className="absolute -top-2 -right-2 text-[9px] px-1.5 py-0.5 rounded-full bg-[color:var(--color-brand-2)] text-white">{count}</span>
+                  )}
                 </button>
                 <div className="relative">
                   <button

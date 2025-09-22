@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
+import AdminGuard from "@/components/AdminGuard";
 
 // Types (adaptés à ton usage)
 type Variant = { id?: string; size: string; color: string; price: number; stock: number };
@@ -22,35 +23,6 @@ export default function AdminProductsPage() {
   const router = useRouter();
   const search = useSearchParams();
   const productId = search.get("id"); // si présent => édition
-
-  const [authLoading, setAuthLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-        const {data: userRes} = await supabase.auth.getUser();
-        const user = userRes?.user;
-        if (!user) {
-            router.replace("/");
-            return;
-        }
-
-        const {data: profile, error} = await supabase
-            .from("profiles")
-            .select("role")
-            .eq("id", user.id)
-            .single();
-
-        const admin = !error && profile?.role === "admin";
-        if (alive) {
-            setIsAdmin(!!admin);
-            setAuthLoading(false);
-            if (!admin) router.replace("/");
-        } 
-    })();
-    return () => { alive = false; };
-  }, [router]);
 
   const [loading, setLoading] = useState<boolean>(!!productId);
   const [saving, setSaving] = useState(false);
@@ -265,231 +237,233 @@ export default function AdminProductsPage() {
   }
 
   return (
-    <div className="bg-neutral-50">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-semibold text-neutral-900">
-          {productId ? "Modifier le produit" : "Créer un produit"}
-        </h1>
-        <p className="mt-2 text-sm text-neutral-600">
-          Renseigne les informations produit. Le visuel et les champs reprennent l’ergonomie de la fiche produit.
-        </p>
+    <AdminGuard>
+      <div className="bg-neutral-50">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-semibold text-neutral-900">
+            {productId ? "Modifier le produit" : "Créer un produit"}
+          </h1>
+          <p className="mt-2 text-sm text-neutral-600">
+            Renseigne les informations produit. Le visuel et les champs reprennent l'ergonomie de la fiche produit.
+          </p>
 
-        <form onSubmit={onSubmit} className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          {/* Colonne gauche : Infos produit */}
-          <div className="space-y-8">
-            {/* Identité */}
-            <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-neutral-900">Identité</h2>
-              <p className="mt-1 text-sm text-neutral-500">Titre, marque, catégorie et description.</p>
+          <form onSubmit={onSubmit} className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+            {/* Colonne gauche : Infos produit */}
+            <div className="space-y-8">
+              {/* Identité */}
+              <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-neutral-900">Identité</h2>
+                <p className="mt-1 text-sm text-neutral-500">Titre, marque, catégorie et description.</p>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-neutral-700">Titre</label>
-                  <input
-                    value={form.name}
-                    onChange={onInput("name")}
-                    className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                    required
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-neutral-700">Marque</label>
-                  <input
-                    value={form.brand}
-                    onChange={onInput("brand")}
-                    className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-neutral-700">Catégorie</label>
-                  <input
-                    value={form.category}
-                    onChange={onInput("category")}
-                    className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4 flex flex-col">
-                <label className="text-sm font-medium text-neutral-700">Description</label>
-                <textarea
-                  value={form.description}
-                  onChange={onInput("description")}
-                  rows={5}
-                  className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                />
-              </div>
-            </section>
-
-            {/* Variantes */}
-            <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-neutral-900">Tailles & couleurs</h2>
-              <p className="mt-1 text-sm text-neutral-500">
-                Gère les combinaisons taille/couleur, leur prix spécifique et le stock.
-              </p>
-
-              <div className="mt-6 space-y-4">
-                {form.variants.map((v, i) => (
-                  <div key={i} className="grid gap-3 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto]">
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-neutral-700">Titre</label>
                     <input
-                      placeholder="Taille (ex: 42)"
-                      value={v.size}
-                      onChange={(e) => setVariant(i, "size", e.target.value)}
-                      className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                      value={form.name}
+                      onChange={onInput("name")}
+                      className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
                       required
                     />
-                    <input
-                      placeholder="Couleur (ex: black)"
-                      value={v.color}
-                      onChange={(e) => setVariant(i, "color", e.target.value)}
-                      className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                      required
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      placeholder={`Prix (def: ${form.price})`}
-                      value={v.price}
-                      onChange={(e) => setVariant(i, "price", Number(e.target.value))}
-                      className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                      required
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      placeholder="Stock"
-                      value={v.stock}
-                      onChange={(e) => setVariant(i, "stock", Number(e.target.value))}
-                      className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeVariant(i)}
-                      className="rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
-                    >
-                      Suppr.
-                    </button>
                   </div>
-                ))}
-              </div>
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-neutral-700">Marque</label>
+                    <input
+                      value={form.brand}
+                      onChange={onInput("brand")}
+                      className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-neutral-700">Catégorie</label>
+                    <input
+                      value={form.category}
+                      onChange={onInput("category")}
+                      className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                    />
+                  </div>
+                </div>
 
-              <button
-                type="button"
-                onClick={addVariant}
-                className="mt-4 rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
-              >
-                + Ajouter une variante
-              </button>
-            </section>
-          </div>
-
-          {/* Colonne droite : actions / résumé simple */}
-          <aside className="space-y-6">
-            {/* Prix de base */}
-            <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-neutral-900">Tarification</h2>
-              <p className="mt-1 text-sm text-neutral-500">
-                Prix de base (affiché sur la PDP) et prix par variante si nécessaire.
-              </p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="flex flex-col">
-                  <label className="text-sm font-medium text-neutral-700">Prix TTC (base)*</label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={form.price}
-                    onChange={(e) => setField("price", Number(e.target.value))}
+                <div className="mt-4 flex flex-col">
+                  <label className="text-sm font-medium text-neutral-700">Description</label>
+                  <textarea
+                    value={form.description}
+                    onChange={onInput("description")}
+                    rows={5}
                     className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                    required
                   />
                 </div>
-              </div>
-            </section>
-            
-            {/* Images */}
-            <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-neutral-900">Images</h2>
-              <p className="mt-1 text-sm text-neutral-500">Ajoute/supprime des URLs d’images. Marque une miniature.</p>
+              </section>
 
-              <div className="mt-6 space-y-4">
-                {form.images.map((img, i) => (
-                  <div key={i} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
-                    <input
-                      placeholder="https://…"
-                      value={img.url}
-                      onChange={(e) => setImage(i, "url", e.target.value)}
-                      className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
-                      required
-                    />
-                    <label className="inline-flex items-center gap-2 text-sm text-neutral-700 px-2">
-                      <input
-                        type="checkbox"
-                        checked={!!img.isThumbnail}
-                        onChange={(e) => setImage(i, "isThumbnail", e.target.checked)}
-                      />
-                      Miniature
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => removeImage(i)}
-                      className="rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
-                    >
-                      Suppr.
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={addImage}
-                className="mt-4 rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
-              >
-                + Ajouter une image
-              </button>
-            </section>
-            
-            <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-neutral-900">Actions</h2>
-              <div className="mt-4 space-y-2 text-sm text-neutral-700">
-                <div className="flex items-center justify-between">
-                  <span>Variantes</span>
-                  <span className="font-medium">{form.variants.length}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Images</span>
-                  <span className="font-medium">{form.images.filter((i) => i.url.trim()).length}</span>
-                </div>
-              </div>
-
-              {error ? (
-                <p className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
-                  {error}
+              {/* Variantes */}
+              <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-neutral-900">Tailles & couleurs</h2>
+                <p className="mt-1 text-sm text-neutral-500">
+                  Gère les combinaisons taille/couleur, leur prix spécifique et le stock.
                 </p>
-              ) : null}
-                
-                <div>
-                   <button
-                        type="button"
-                        onClick={() => router.push("/shop")}
-                        className="px-2 py-1 rounded-lg border border-[#015A52] border-2 hover:bg-neutral-50">
-                        Retour boutique
-                    </button>
 
-                    <button
-                        type="submit"
-                        disabled={saving}
-                        className="px-2 py-1 rounded-lg border border-[#015A52] border-2 bg-[#015A52] text-white hover:opacity-95">
-                        {saving ? (productId ? "Mise à jour..." : "Création...") : productId ? "Enregistrer les modifications" : "Créer le produit"}
-                    </button> 
+                <div className="mt-6 space-y-4">
+                  {form.variants.map((v, i) => (
+                    <div key={i} className="grid gap-3 sm:grid-cols-[repeat(4,minmax(0,1fr))_auto]">
+                      <input
+                        placeholder="Taille (ex: 42)"
+                        value={v.size}
+                        onChange={(e) => setVariant(i, "size", e.target.value)}
+                        className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                        required
+                      />
+                      <input
+                        placeholder="Couleur (ex: black)"
+                        value={v.color}
+                        onChange={(e) => setVariant(i, "color", e.target.value)}
+                        className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                        required
+                      />
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder={`Prix (def: ${form.price})`}
+                        value={v.price}
+                        onChange={(e) => setVariant(i, "price", Number(e.target.value))}
+                        className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                        required
+                      />
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder="Stock"
+                        value={v.stock}
+                        onChange={(e) => setVariant(i, "stock", Number(e.target.value))}
+                        className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeVariant(i)}
+                        className="rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+                      >
+                        Suppr.
+                      </button>
+                    </div>
+                  ))}
                 </div>
-                
+
+                <button
+                  type="button"
+                  onClick={addVariant}
+                  className="mt-4 rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+                >
+                  + Ajouter une variante
+                </button>
+              </section>
+            </div>
+
+            {/* Colonne droite : actions / résumé simple */}
+            <aside className="space-y-6">
+              {/* Prix de base */}
+              <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-neutral-900">Tarification</h2>
+                <p className="mt-1 text-sm text-neutral-500">
+                  Prix de base (affiché sur la PDP) et prix par variante si nécessaire.
+                </p>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  <div className="flex flex-col">
+                    <label className="text-sm font-medium text-neutral-700">Prix TTC (base)*</label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={form.price}
+                      onChange={(e) => setField("price", Number(e.target.value))}
+                      className="mt-2 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner transition focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                      required
+                    />
+                  </div>
+                </div>
+              </section>
               
-            </section>
-          </aside>
-        </form>
+              {/* Images */}
+              <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-neutral-900">Images</h2>
+                <p className="mt-1 text-sm text-neutral-500">Ajoute/supprime des URLs d'images. Marque une miniature.</p>
+
+                <div className="mt-6 space-y-4">
+                  {form.images.map((img, i) => (
+                    <div key={i} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto]">
+                      <input
+                        placeholder="https://…"
+                        value={img.url}
+                        onChange={(e) => setImage(i, "url", e.target.value)}
+                        className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 shadow-inner focus:border-neutral-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900/10"
+                        required
+                      />
+                      <label className="inline-flex items-center gap-2 text-sm text-neutral-700 px-2">
+                        <input
+                          type="checkbox"
+                          checked={!!img.isThumbnail}
+                          onChange={(e) => setImage(i, "isThumbnail", e.target.checked)}
+                        />
+                        Miniature
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        className="rounded-full border border-neutral-200 px-4 py-3 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+                      >
+                        Suppr.
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addImage}
+                  className="mt-4 rounded-full border border-neutral-200 px-5 py-2.5 text-sm font-semibold text-neutral-700 transition hover:border-neutral-400 hover:text-neutral-900"
+                >
+                  + Ajouter une image
+                </button>
+              </section>
+              
+              <section className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-neutral-900">Actions</h2>
+                <div className="mt-4 space-y-2 text-sm text-neutral-700">
+                  <div className="flex items-center justify-between">
+                    <span>Variantes</span>
+                    <span className="font-medium">{form.variants.length}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Images</span>
+                    <span className="font-medium">{form.images.filter((i) => i.url.trim()).length}</span>
+                  </div>
+                </div>
+
+                {error ? (
+                  <p className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600">
+                    {error}
+                  </p>
+                ) : null}
+                  
+                  <div>
+                     <button
+                          type="button"
+                          onClick={() => router.push("/shop")}
+                          className="px-2 py-1 rounded-lg border border-[#015A52] border-2 hover:bg-neutral-50">
+                          Retour boutique
+                      </button>
+
+                      <button
+                          type="submit"
+                          disabled={saving}
+                          className="px-2 py-1 rounded-lg border border-[#015A52] border-2 bg-[#015A52] text-white hover:opacity-95">
+                          {saving ? (productId ? "Mise à jour..." : "Création...") : productId ? "Enregistrer les modifications" : "Créer le produit"}
+                      </button> 
+                  </div>
+                  
+                
+              </section>
+            </aside>
+          </form>
+        </div>
       </div>
-    </div>
+    </AdminGuard>
   );
 }

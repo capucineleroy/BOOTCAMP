@@ -87,7 +87,7 @@ export default function LoginPage() {
                 required
               />
               <div className="mt-2 text-right">
-                <Link href="/forgot-password" className="text-xs font-semibold text-[#018D5B] transition hover:text-[#02a56d]">
+                <Link href="/forgot-password" className="text-xs font-semibold text-[var(--color-brand-3)] transition hover:text-[#02a56d]">
                   Mot de passe oublie ?
                 </Link>
               </div>
@@ -100,14 +100,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-[#018D5B] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-[var(--color-brand-3)] py-3 text-sm font-semibold text-white shadow-lg transition-colors hover:bg-[#02a56d] hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#49d9ab]/40 focus:ring-offset-2 focus:ring-offset-white disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Connexion..." : "Se connecter"}
             </button>
           </form>
           <p className="mt-6 text-sm text-neutral-500">
             Pas encore de compte ?
-            <Link href="/register" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
+            <Link href="/register" className="ml-2 font-semibold text-[var(--color-brand-3)] hover:text-[#02a56d]">
               Créer un compte
             </Link>
           </p>

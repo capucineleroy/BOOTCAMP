@@ -121,7 +121,7 @@ export default function OrdersPage() {
       return (
         <div className="rounded-lg border border-neutral-200 bg-white p-8 text-center shadow-sm">
           <h2 className="text-xl font-semibold text-neutral-900">Aucune commande pour le moment</h2>
-          <p className="mt-3 text-sm text-neutral-600">Parcourez notre boutique et lancez-vous dans l'experience Sneco.</p>
+          <p className="mt-3 text-sm text-neutral-600">Parcourez notre boutique et lancez-vous dans l'expérience Sneco.</p>
           <Link
             href="/shop"
             className="mt-5 inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[var(--color-brand-3)] text-white hover:opacity-95 hover:cursor-pointer"
@@ -149,7 +149,7 @@ export default function OrdersPage() {
                 <div>
                   <p className="text-xs uppercase tracking-wide text-neutral-500">Commande</p>
                   <h3 className="mt-1 text-lg font-semibold text-neutral-900">{order.id}</h3>
-                  <p className="text-sm text-neutral-500">Passee le {createdAt}</p>
+                  <p className="text-sm text-neutral-500">Passée le {createdAt}</p>
                   {shippingCity ? (
                     <p className="text-xs text-neutral-500">Livraison : {String(shippingCity)}</p>
                   ) : null}
@@ -188,7 +188,7 @@ export default function OrdersPage() {
                 </div>
               ) : (
                 <p className="mt-4 rounded-2xl bg-neutral-50 px-4 py-3 text-sm text-neutral-500">
-                  Aucun article detaille pour cette commande.
+                  Aucun article detaillé pour cette commande.
                 </p>
               )}
               <div className="mt-6 flex flex-wrap justify-end gap-3">
@@ -211,7 +211,7 @@ export default function OrdersPage() {
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <header className="mb-8">
           <h1 className="text-3xl font-semibold text-neutral-900">Historique d'achat</h1>
-          <p className="mt-2 text-sm text-neutral-600">Consultez vos commandes passees et suivez leur statut.</p>
+          <p className="mt-2 text-sm text-neutral-600">Consultez vos commandes passées et suivez leur statut.</p>
         </header>
         {content}
       </div>

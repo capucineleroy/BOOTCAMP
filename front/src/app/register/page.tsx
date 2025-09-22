@@ -32,7 +32,7 @@ export default function RegisterPage() {
           <RegisterForm />
           <p className="mt-6 text-sm text-neutral-500">
             Déjà inscrit ?
-            <Link href="/login" className="ml-2 font-semibold text-[#018D5B] hover:text-[#02a56d]">
+            <Link href="/login" className="ml-2 font-semibold text-[var(--color-brand-3)] hover:text-[#02a56d]">
               Se connecter
             </Link>
           </p>

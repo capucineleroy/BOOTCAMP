@@ -73,7 +73,7 @@ export default function CartDrawer() {
                       <div className="inline-flex items-center gap-2">
                         <button
                           aria-label={`Diminuer la quantite pour ${name}`}
-                          className="rounded border px-2 py-1 disabled:opacity-40"
+                          className="rounded border px-2 py-1 disabled:opacity-40 hover:cursor-pointer"
                           onClick={() => {
                             const next = (item.quantity ?? 1) - 1;
                             if (next <= 0) remove(item.variantId);
@@ -86,7 +86,7 @@ export default function CartDrawer() {
                         <span className="w-6 text-center text-sm">{item.quantity}</span>
                         <button
                           aria-label={`Augmenter la quantite pour ${name}`}
-                          className="rounded border px-2 py-1 disabled:opacity-40"
+                          className="rounded border px-2 py-1 disabled:opacity-40 hover:cursor-pointer"
                           onClick={() => setQuantity(item.variantId, (item.quantity ?? 1) + 1)}
                           disabled={(item.quantity ?? 1) >= (item.variant?.stock ?? Number.MAX_SAFE_INTEGER)}
                         >
@@ -95,7 +95,7 @@ export default function CartDrawer() {
                       </div>
 
                       <button
-                        className="text-xs text-rose-600"
+                        className="text-xs text-rose-600 hover:cursor-pointer"
                         onClick={() => remove(item.variantId)}
                         aria-label={`Retirer ${name} du panier`}
                       >
@@ -117,7 +117,7 @@ export default function CartDrawer() {
             <button
               onClick={handleCheckout}
               disabled={detailed.length === 0}
-              className="w-full rounded-lg bg-[#014545] py-3 text-white transition hover:opacity-95 disabled:opacity-50"
+              className="w-full rounded-lg bg-[#014545] py-3 text-white transition hover:cursor-pointer hover:opacity-95 disabled:opacity-50"
             >
               Passer au paiement
             </button>

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import ProductCard from "../../../components/ProductCard";
 import { useCart } from "../../../context/CartContext";
 import { useFavorites } from "../../../context/FavoritesContext";
+import { useAuth } from "../../../context/AuthContext";
 import { HeartIcon } from "../../../components/icons";
 import { fetchProducts, getProduct as fetchProduct } from "../../../lib/supabaseApi";
 import type { Product, ProductVariant } from "../../../lib/types";
@@ -13,6 +14,7 @@ export default function ProductDetail() {
   const router = useRouter();
   const { add } = useCart();
   const { isFavorite, toggle } = useFavorites();
+  const { role } = useAuth() as any;
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -352,13 +354,22 @@ export default function ProductDetail() {
 
           {/* Actions */}
           <div className="flex items-center gap-3 mt-4">
-            <button
-              onClick={() => selectedVariant && add(selectedVariant.id, 1)}
-              disabled={!selectedVariant || stock === 0}
-              className="px-6 py-3 rounded-lg bg-[color:var(--color-brand-3)] text-white disabled:opacity-50 hover:cursor-pointer"
-            >
-              Ajouter au panier
-            </button>
+            {role === 'admin' ? (
+              <button
+                onClick={() => router.push(`/admin/products?id=${product.id}`)}
+                className="px-6 py-3 rounded-lg bg-[#014545] text-white hover:bg-[#026b6b] hover:cursor-pointer transition-colors"
+              >
+                Modifier le produit
+              </button>
+            ) : (
+              <button
+                onClick={() => selectedVariant && add(selectedVariant.id, 1)}
+                disabled={!selectedVariant || stock === 0}
+                className="px-6 py-3 rounded-lg bg-[color:var(--color-brand-3)] text-white disabled:opacity-50 hover:cursor-pointer"
+              >
+                Ajouter au panier
+              </button>
+            )}
             <button onClick={() => router.push("/shop")} className="px-6 py-3 rounded-lg border-2 hover:cursor-pointer"
               >Retour au catalogue
             </button>

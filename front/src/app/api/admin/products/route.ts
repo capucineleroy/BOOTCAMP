@@ -1,4 +1,4 @@
-﻿import { randomUUID } from "crypto";
+import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import {
@@ -528,6 +528,75 @@ export async function PUT(request: NextRequest) {
 
     const mapped = mapPostgrestError(errorPayload);
     return NextResponse.json({ error: mapped.message }, { status: mapped.status });
+  }
+}
+
+
+
+
+export async function DELETE(request: NextRequest) {
+  const admin = await requireAdmin(request);
+  if (admin instanceof NextResponse) return admin;
+
+  const url = new URL(request.url);
+  const productId = url.searchParams.get("id");
+
+  if (!productId) {
+    return NextResponse.json({ error: "Product ID is required." }, { status: 400 });
+  }
+
+  try {
+    // First, get all variants and images to delete them
+    const { data: productData, error: fetchError } = await supabaseAdmin
+      .from("products")
+      .select("*, product_variants(*), product_images(*)")
+      .eq("id", productId)
+      .single();
+
+    if (fetchError) {
+      return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    }
+
+    // Delete images first
+    const imageIds = (productData.product_images ?? []).map((img: any) => img.id);
+    if (imageIds.length > 0) {
+      const { error: deleteImagesError } = await supabaseAdmin
+        .from("product_images")
+        .delete()
+        .in("id", imageIds);
+
+      if (deleteImagesError) {
+        return NextResponse.json({ error: "Failed to delete product images." }, { status: 500 });
+      }
+    }
+
+    // Delete variants
+    const variantIds = (productData.product_variants ?? []).map((variant: any) => variant.id);
+    if (variantIds.length > 0) {
+      const { error: deleteVariantsError } = await supabaseAdmin
+        .from("product_variants")
+        .delete()
+        .in("id", variantIds);
+
+      if (deleteVariantsError) {
+        return NextResponse.json({ error: "Failed to delete product variants." }, { status: 500 });
+      }
+    }
+
+    // Finally delete the product
+    const { error: deleteProductError } = await supabaseAdmin
+      .from("products")
+      .delete()
+      .eq("id", productId);
+
+    if (deleteProductError) {
+      return NextResponse.json({ error: "Failed to delete product." }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, message: "Product deleted successfully." }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }
 

@@ -43,14 +43,14 @@ const faqs = [
       "Le processus complet prend jusqu'à 7 semaines, transport inclus, avec un suivi par email à chaque étape.",
   },
   {
-    question: "Le devis est-il payant ?",
+    question: "Quel sera le prix de ma réparation ?",
     answer:
-      "Non, le diagnostic et le devis sont gratuits. Vous decidez d'accepter ou non avant d'engager la réparation.",
+      "Non, le diagnostic et le devis sont gratuits. Vous decidez d'accepter ou non avant d'engager la réparation. De plus, le prix est variable selon l'état de la paire, 60% du prix de la réparation sera reversé à une association.",
   },
   {
-    question: "Comment préparer mon colis ?",
+    question: "Que faire si ma paire n'est pas réparable ?",
     answer:
-      "Nous vous envoyons un kit d'expédition prépayé et recyclé pour protéger vos sneakers pendant le transport.",
+      "Nous reprennons votre paire gratuitement afin de l'envoyer à nos associations partenaires, afin de la recycler.",
   },
 ] as const;
 

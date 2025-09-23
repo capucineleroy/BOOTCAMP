@@ -33,3 +33,72 @@ export interface User {
   email: string;
   role: Role;
 }
+
+// Dashboard Types
+export interface SalesStats {
+  totalSales: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+}
+
+export interface RepairRequest {
+  id: string;
+  productId: string;
+  productName: string;
+  customerId: string;
+  customerName: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+  description?: string;
+}
+
+export interface RepairStats {
+  totalRequests: number;
+  pendingRequests: number;
+  inProgressRequests: number;
+  completedRequests: number;
+  requestsOverTime: Array<{
+    date: string;
+    total: number;
+    pending: number;
+    inProgress: number;
+    completed: number;
+  }>;
+}
+
+export interface RevenueData {
+  daily: Array<{
+    date: string;
+    revenue: number;
+    orders: number;
+  }>;
+  weekly: Array<{
+    week: string;
+    revenue: number;
+    orders: number;
+  }>;
+  monthly: Array<{
+    month: string;
+    revenue: number;
+    orders: number;
+  }>;
+}
+
+export interface StockAlert {
+  productId: string;
+  productName: string;
+  variantId: string;
+  variantName: string;
+  currentStock: number;
+  alertLevel: 'low' | 'critical';
+  suggestedReorder: number;
+}
+
+export interface DashboardData {
+  sales: SalesStats;
+  repairs: RepairStats;
+  revenue: RevenueData;
+  stockAlerts: StockAlert[];
+  lastUpdated: string;
+}

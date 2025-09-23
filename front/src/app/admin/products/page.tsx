@@ -480,14 +480,14 @@ export default function AdminProductsPage() {
                           type="button"
                           onClick={() => router.push("/shop")}
                           className="px-3 py-2 rounded-lg border border-[#015A52] border-2 hover:bg-neutral-50">
-                          Retour boutique
+                          Retour
                       </button>
 
                       <button
                           type="submit"
                           disabled={saving}
                           className="px-3 py-2 rounded-lg border border-[#015A52] border-2 bg-[#015A52] text-white hover:opacity-95">
-                          {saving ? (productId ? "Mise à jour..." : "Création...") : productId ? "Enregistrer les modifications" : "Créer le produit"}
+                          {saving ? (productId ? "Mise à jour..." : "Création...") : productId ? "Modifier" : "Créer"}
                       </button> 
                   </div>                
               </section>

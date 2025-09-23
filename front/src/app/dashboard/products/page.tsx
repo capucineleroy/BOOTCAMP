@@ -173,7 +173,7 @@ export default function ProductsAdmin() {
             onClick={() => router.push('/admin/products')}
             className="bg-[#014545] text-white px-4 py-2 rounded-lg hover:cursor-pointer hover:bg-[#026b6b] transition-colors"
           >
-            + Ajouter un produit
+            + Ajouter
           </button>
         </div>
 

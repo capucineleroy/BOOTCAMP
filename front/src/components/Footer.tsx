@@ -16,16 +16,6 @@ export default function Footer() {
                 Github
               </a>
             </li>
-            <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Document de synthèse
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-[#018D5B] transition-colors hover:text-[#02a56d]">
-                Présentation
-              </a>
-            </li>
           </ul>
         </div>
         <div>
